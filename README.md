@@ -1,5 +1,6 @@
 # Schedule_management
 
+0. 基本功能
 1. 状态机
 2. 连接远程数据库
 3. 模块化
