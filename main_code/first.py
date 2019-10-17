@@ -45,6 +45,7 @@ def start():
     main_control_machine.run()
 
 if __name__=='__main__':
-    # db = pymysql.connect("http://121.199.40.243","","","")
+    db = pymysql.connect("121.199.40.243","YuanCheng_user","_Hexagram_user","test_python")
+    db.close()
     print(state_machine)
     start()
