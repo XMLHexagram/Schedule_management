@@ -21,7 +21,7 @@ class Main_control_machine(object):
                 self.database_control.print_data()
                 self.state = state_machine[int(input('input num'))]
             if self.state == 'input':
-                self.state = self.database_control.input_into_database(input())                  
+                self.state = self.database_control.input_into_database()                  
             if self.state == 'delete':
                 pass
             if self.state == 'search':
@@ -32,14 +32,13 @@ class Main_control_machine(object):
 class Database_control(object):
     def __init__(self):
         self.db = pymysql.connect("121.199.40.243","YuanCheng_user","_Hexagram_user","test_python")
+    def print_data(self):
         cursor = self.db.cursor()
-        cursor.execute("desc events_arrangement")
+        cursor.execute("select * from events_arrangement")
         data = cursor.fetchall()
         print(data)
-    def print_data(self):
-        print(self.db)
-    def input_into_database(self,input_sth):
-        pass
+    def input_into_database(self):
+        input()
         return state_machine[1]
     def end_connect(self):
         self.db.close()
