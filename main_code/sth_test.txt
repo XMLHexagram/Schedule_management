@@ -1,0 +1,9 @@
+CREATE TABLE `events_arrangement`(
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `events_title` VARCHAR(600) NOT NULL,
+    `events_create_date` DATETIME,
+    `events_end_time` datetime,
+    `events_advance_waring_time` time,
+    `extre_sth` VARCHAR(300) not NULL,
+    PRIMARY KEY ( `id` )
+    )ENGINE=InnoDB DEFAULT CHARSET=utf8; 

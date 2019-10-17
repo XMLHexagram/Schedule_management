@@ -1,7 +1,5 @@
 #!/usr/bin/env python 
 # -*- coding: utf-8 -*- 
-# test
-# aaaaaa
 import sys
 import pymysql
 
@@ -33,19 +31,23 @@ class Main_control_machine(object):
 
 class Database_control(object):
     def __init__(self):
-        self._database = []
+        self.db = pymysql.connect("121.199.40.243","YuanCheng_user","_Hexagram_user","test_python")
+        cursor = self.db.cursor()
+        cursor.execute("desc events_arrangement")
+        data = cursor.fetchall()
+        print(data)
     def print_data(self):
-        print(self._database)
+        print(self.db)
     def input_into_database(self,input_sth):
-        self._database.append(input_sth)
+        pass
         return state_machine[1]
+    def end_connect(self):
+        self.db.close()
 
 def start():
     main_control_machine = Main_control_machine()
     main_control_machine.run()
 
 if __name__=='__main__':
-    db = pymysql.connect("121.199.40.243","YuanCheng_user","_Hexagram_user","test_python")
-    db.close()
     print(state_machine)
     start()
