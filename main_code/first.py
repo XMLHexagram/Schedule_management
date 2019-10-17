@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*- 
 
 import sys
+import pymysql
 
 state_machine = {
     1:'spare',
@@ -43,5 +44,6 @@ def start():
     main_control_machine.run()
 
 if __name__=='__main__':
+    # db = pymysql.connect("http://121.199.40.243","","","")
     print(state_machine)
     start()
