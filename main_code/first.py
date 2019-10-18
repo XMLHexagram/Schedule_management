@@ -56,11 +56,12 @@ class Database_control(object):
         create_time_str = datetime.datetime.strftime(create_time,'%Y-%m-%d %H:%M:%S')
 
         sql = """
-            insert into table events_arrangement 
-            (events_title,events_create_date,events_end_time,events_advance_waring_time,extra_sth)
+            insert into events_arrangement 
+            (events_title,events_create_date,events_end_time,events_advance_waring_time,extre_sth)
             values
-            (%s,%s,%s,%s,%s)
+            ('%s','%s','%s','%s','%s')
             """ % (title,create_time_str,end_time,advance_warning_time,extre_sth)
+        #print(sql)
         #try:
         self.cursor.execute(sql)
         self.db.commit()
