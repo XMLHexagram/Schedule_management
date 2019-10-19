@@ -1,5 +1,8 @@
+#!/usr/bin/env python 
+# -*- coding: utf-8 -*- j
 import pymysql
 import datetime
+import prettytable
 
 
 state_machine = {
@@ -22,24 +25,15 @@ class Database_control(object):
             
             self.cursor.execute(sql)
             results = self.cursor.fetchall()
-            for row in results:
-                _id = row[0]
-                _title = row[1]
-                _create_date = row[2]
-                _end_time = row[3]
-                _advance_warning_time = row[4]
-                _extre_sth = row[5]
-                    
-                print("%s,%s,%s,%s,%s,%s" % \
-                    (_id,_title,_create_date, \
-                    _end_time,_advance_warning_time,_extre_sth))
+            self.__direct_print(results)
 
     def change_database(self):
-        dict = {
+        colums = {
             1:'events_end_time',
             2:'events_title',
             3:'events_advance_waring_time',
         }
+        temp_id = int(input("please the id you want to change"))
         temp=int(input("please what you want to change\n \
             (end_time:1, sth_title:2, advance_warning_time:3):"))
         
@@ -53,8 +47,11 @@ class Database_control(object):
         sql = \
             """
             UPDATE events_arrangement
-            SET 
-            """
+            SET %s='%s'
+            WHERE id=%d  
+            """ % (colums[temp],temp_input,temp_id)
+        self.__direct_database_control(sql)
+        
         return state_machine[1]
 
     def insert_into_database(self):
@@ -98,6 +95,23 @@ class Database_control(object):
         except:
             print("wrong!!!")
             self.db.rollback()
+
+    def __direct_print(self,temp):
+        table = prettytable.PrettyTable(["ID","事务内容", \
+            "创建时间","截至日期","提前预警时间","额外附加"])
+        for row in temp:
+            _id = row[0]
+            _title = row[1]
+            _create_date = str(row[2])
+            _end_time = str(row[3])
+            _advance_warning_time = str(row[4])
+            _extre_sth = row[5]            
+            table.add_row( \
+            [_id,_title,_create_date[0:-3], \
+            _end_time[0:-3],_advance_warning_time[0:-3],_extre_sth] \
+            )
+        print(table)
+
 
     def end_connect(self):
         self.db.close()

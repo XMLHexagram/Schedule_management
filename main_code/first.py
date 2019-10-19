@@ -1,12 +1,12 @@
 #!/usr/bin/env python 
-# -*- coding: utf-8 -*- 
+# -*- coding: utf-8 -*- j
 import sys
 import database_mod.database_connect
 
 state_machine = {
     1:'spare', #
     2:'insert',#
-    3:'change',
+    3:'change',#
     4:'delete',#
     5:'end',#
     6:'search',
