@@ -23,7 +23,7 @@ class Main_control_machine(object):
             if self.state == 'insert':
                 self.state = self.database_control.insert_into_database()
             if self.state == 'delete':
-                pass
+                self.state=self.database_control.delete_id_row()
             if self.state == 'search':
                 pass
             if self.state == 'change':
