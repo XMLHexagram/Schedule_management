@@ -4,11 +4,11 @@ import sys
 import database_mod.database_connect
 
 state_machine = {
-    1:'spare',
-    2:'insert',
+    1:'spare', #
+    2:'insert',#
     3:'change',
-    4:'delete',
-    5:'end',
+    4:'delete',#
+    5:'end',#
     6:'search',
 }
 class Main_control_machine(object):
@@ -26,8 +26,9 @@ class Main_control_machine(object):
                 self.state=self.database_control.delete_id_row()
             if self.state == 'search':
                 pass
+                #self.state = self.database_control
             if self.state == 'change':
-                pass
+                self.state = self.database_control.change_database()
         else:
             self.database_control.end_connect()
             sys.exit(0)            

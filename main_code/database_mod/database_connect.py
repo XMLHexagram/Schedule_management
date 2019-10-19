@@ -34,6 +34,29 @@ class Database_control(object):
                     (_id,_title,_create_date, \
                     _end_time,_advance_warning_time,_extre_sth))
 
+    def change_database(self):
+        dict = {
+            1:'events_end_time',
+            2:'events_title',
+            3:'events_advance_waring_time',
+        }
+        temp=int(input("please what you want to change\n \
+            (end_time:1, sth_title:2, advance_warning_time:3):"))
+        
+        if temp == 1:
+            temp_input = input("end_time:")
+        elif temp == 2:
+            temp_input = input("sth_title:")
+        else:
+            # temp == 3
+            temp_input = input("advance_warning_time:")
+        sql = \
+            """
+            UPDATE events_arrangement
+            SET 
+            """
+        return state_machine[1]
+
     def insert_into_database(self):
         title = input("please input sth")
         end_time = input("please input end time,\"- -\"")
