@@ -4,7 +4,6 @@ import pymysql
 import datetime
 import prettytable
 
-
 state_machine = {
     1:'spare',
     2:'insert',
@@ -111,7 +110,6 @@ class Database_control(object):
             _end_time[0:-3],_advance_warning_time[0:-3],_extre_sth] \
             )
         print(table)
-
 
     def end_connect(self):
         self.db.close()
