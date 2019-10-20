@@ -3,6 +3,7 @@
 import pymysql
 import datetime
 import prettytable
+import os
 
 state_machine = {
     1:'spare',
@@ -19,27 +20,32 @@ class Database_control(object):
         self.cursor = self.db.cursor()
         
     def print_data(self):
-            sql = "select * from events_arrangement"
-            self.__direct_database_control(sql)
+        os.system('cls')
+        print(state_machine)
+        sql = "select * from events_arrangement"
+        self.__direct_database_control(sql)
             
-            self.cursor.execute(sql)
-            results = self.cursor.fetchall()
-            self.__direct_print(results)
+        self.cursor.execute(sql)
+        results = self.cursor.fetchall()
+        self.__direct_print(results)
 
     def change_database(self):
         colums = {
             1:'events_end_time',
             2:'events_title',
             3:'events_advance_waring_time',
+            4:'extre_sth'
         }
         temp_id = int(input("please the id you want to change"))
-        temp=int(input("please what you want to change\n \
-            (end_time:1, sth_title:2, advance_warning_time:3):"))
+        temp=int(input("""please what you want to change\n 
+            (end_time:1, sth_title:2, advance_warning_time:3,extre_sth:4):"""))
         
         if temp == 1:
             temp_input = input("end_time:")
         elif temp == 2:
             temp_input = input("sth_title:")
+        elif temp == 4:
+            temp_input = input("extre_sth")
         else:
             # temp == 3
             temp_input = input("advance_warning_time:")

@@ -22,7 +22,11 @@ class Main_control_machine(object):
         while self.state != 'end':
             if self.state == 'spare':
                 self.database_control.print_data()
-                self.state = state_machine[int(input('input num'))]
+                try:
+                    temp = int(input('input num'))
+                    self.state = state_machine[temp]
+                except:
+                    self.database_control.print_data()
             if self.state == 'insert':
                 self.state = self.database_control.insert_into_database()
             if self.state == 'delete':
@@ -41,5 +45,4 @@ def start():
     main_control_machine.run()
 
 if __name__=='__main__':
-    print(state_machine)
     start()
