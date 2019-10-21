@@ -4,6 +4,14 @@ import pymysql
 import datetime
 import prettytable
 import os
+import time
+import sys
+
+def log(func):
+    def wrapper(*args,**kw):
+        print('call %s():' % (func.__name__))
+        return func(*args,**kw)
+    return wrapper
 
 state_machine = {
     1:'spare',
@@ -16,19 +24,23 @@ state_machine = {
 
 class Database_control(object):
     def __init__(self):
-        self.db = pymysql.connect("121.199.40.243","YuanCheng_user","_Hexagram_user","test_python")
-        self.cursor = self.db.cursor()
-        
+        pass
+
     def print_data(self):
         os.system('cls')
         print(state_machine)
+        create_time = datetime.datetime.now()
+        create_time = datetime.datetime.strftime(create_time,'%Y-%m-%d %H:%M:%S')
+        print(create_time)
+        print()
         sql = "select * from events_arrangement"
         self.__direct_database_control(sql)
             
-        self.cursor.execute(sql)
+        # self.cursor.execute(sql)
         results = self.cursor.fetchall()
-        self.__direct_print(results)
+        print(self.__direct_print(results))
 
+    @log
     def change_database(self):
         colums = {
             1:'events_end_time',
@@ -59,9 +71,10 @@ class Database_control(object):
         
         return state_machine[1]
 
+    @log
     def insert_into_database(self):
         title = input("please input sth")
-        end_time = input("please input end time,\"- -\"")
+        end_time = input("please input end time,\"- -\""  )
         if end_time == '':
             end_time = '1111-11-11 11:11:11'
 
@@ -84,8 +97,17 @@ class Database_control(object):
         self.__direct_database_control(sql)
         return state_machine[1]
 
+    @log
     def delete_id_row(self):
         row_id = int(input("Which id do you want to delete"))
+        sql = """
+            SELECT * FROM events_arrangement
+            WHERE id = %d
+            """ % (row_id)
+        self.__direct_database_control(sql)
+        results = self.cursor.fetchall()
+        self.__insert_into_file(results)
+
         sql = """
             DELETE FROM events_arrangement
             WHERE id = %d
@@ -94,12 +116,14 @@ class Database_control(object):
         return state_machine[1]
 
     def __direct_database_control(self,sql):
+        self.__connect_database()
         try:
             self.cursor.execute(sql)
             self.db.commit()
         except:
             print("wrong!!!")
             self.db.rollback()
+            time.sleep(5)
 
     def __direct_print(self,temp):
         table = prettytable.PrettyTable(["ID","事务内容", \
@@ -115,7 +139,19 @@ class Database_control(object):
             [_id,_title,_create_date[0:-3], \
             _end_time[0:-3],_advance_warning_time[0:-3],_extre_sth] \
             )
-        print(table)
+        return table
+
+    def __insert_into_file(self,file_neirong):
+        path1 = os.path.abspath('.')
+        path1 = path1 + '/main_code/database_log/log.txt'
+        # print(path1)
+        temp = self.__direct_print(file_neirong)
+        f = open(path1,mode='a',encoding='utf-8')
+        f.write("\n\n%s" % temp)
+        f.close
+    def __connect_database(self):
+        self.db = pymysql.connect("121.199.40.243","YuanCheng_user","_Hexagram_user","test_python")
+        self.cursor = self.db.cursor()
 
     def end_connect(self):
         self.db.close()

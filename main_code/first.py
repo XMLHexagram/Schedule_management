@@ -27,18 +27,19 @@ class Main_control_machine(object):
                     self.state = state_machine[temp]
                 except:
                     self.database_control.print_data()
-            if self.state == 'insert':
+            elif self.state == 'insert':
                 self.state = self.database_control.insert_into_database()
-            if self.state == 'delete':
+            elif self.state == 'delete':
                 self.state=self.database_control.delete_id_row()
-            if self.state == 'search':
+            elif self.state == 'search':
                 pass
                 #self.state = self.database_control
-            if self.state == 'change':
+            elif self.state == 'change':
                 self.state = self.database_control.change_database()
-        else:
+            else:
+                self.database_control.end_connect()
+                sys.exit(0)            
             self.database_control.end_connect()
-            sys.exit(0)            
 
 def start():
     main_control_machine = Main_control_machine()
