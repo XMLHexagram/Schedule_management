@@ -142,12 +142,12 @@ class Database_control(object):
         return table
 
     def __insert_into_file(self,file_neirong):
+        sth_to_say = input("please say sth about this events:\n")
         path1 = os.path.abspath('.')
         path1 = path1 + '/main_code/database_log/log.txt'
         # print(path1)
         temp = self.__direct_print(file_neirong)
         f = open(path1,mode='a',encoding='utf-8')
-        sth_to_say = input("please say sth about this events:\n")
         f.write("\n\n%s\n%s" % (temp,sth_to_say))
         f.close
     def __connect_database(self):
