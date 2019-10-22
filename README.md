@@ -27,8 +27,10 @@
     * **v1.1.1**
         * 改良了输入界面，通过换行和":"使输入更人性化
         * 增加了归档记录功能
+5. 已知Bug
+    * 在VScode中运行可以正常删除事务,但是使用.bat或者双击文件打开无法删除事务(直接闪退,有错误提示)
 
-5. *Go All Out To Win.*
+6. *Go All Out To Win.*
 
 <p align="right">lmx-Hexagram</p>
 
