@@ -48,19 +48,19 @@ class Database_control(object):
             3:'events_advance_waring_time',
             4:'extre_sth'
         }
-        temp_id = int(input("please the id you want to change"))
+        temp_id = int(input("please the id you want to change:"))
         temp=int(input("""please what you want to change\n 
             (end_time:1, sth_title:2, advance_warning_time:3,extre_sth:4):"""))
         
         if temp == 1:
-            temp_input = input("end_time:")
+            temp_input = input("end_time:\n")
         elif temp == 2:
-            temp_input = input("sth_title:")
+            temp_input = input("sth_title:\n")
         elif temp == 4:
-            temp_input = input("extre_sth")
+            temp_input = input("extre_sth\n")
         else:
             # temp == 3
-            temp_input = input("advance_warning_time:")
+            temp_input = input("advance_warning_time:\n")
         sql = \
             """
             UPDATE events_arrangement
@@ -73,16 +73,16 @@ class Database_control(object):
 
     @log
     def insert_into_database(self):
-        title = input("please input sth")
-        end_time = input("please input end time,\"- -\""  )
+        title = input("please input sth:\n")
+        end_time = input("please input end time,\"- -\":"  )
         if end_time == '':
             end_time = '1111-11-11 11:11:11'
 
-        advance_warning_time = input("please input advance warning tima,\": :\"")
+        advance_warning_time = input("please input advance warning tima,\": :\":")
         if advance_warning_time == '':
             advance_warning_time = '11:11:11'
             
-        extre_sth = input("please inpot extra sth")
+        extre_sth = input("please inpot extra sth:\n")
         create_time = datetime.datetime.now()
         create_time_str = datetime.datetime.strftime(create_time,'%Y-%m-%d %H:%M:%S')
 
@@ -99,7 +99,7 @@ class Database_control(object):
 
     @log
     def delete_id_row(self):
-        row_id = int(input("Which id do you want to delete"))
+        row_id = int(input("Which id do you want to delete:"))
         sql = """
             SELECT * FROM events_arrangement
             WHERE id = %d
@@ -147,7 +147,8 @@ class Database_control(object):
         # print(path1)
         temp = self.__direct_print(file_neirong)
         f = open(path1,mode='a',encoding='utf-8')
-        f.write("\n\n%s" % temp)
+        sth_to_say = input("please say sth about this events:\n")
+        f.write("\n\n%s\n%s" % (temp,sth_to_say))
         f.close
     def __connect_database(self):
         self.db = pymysql.connect("121.199.40.243","YuanCheng_user","_Hexagram_user","test_python")

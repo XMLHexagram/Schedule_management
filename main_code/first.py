@@ -23,7 +23,7 @@ class Main_control_machine(object):
             if self.state == 'spare':
                 self.database_control.print_data()
                 try:
-                    temp = int(input('input num'))
+                    temp = int(input('input num:'))
                     self.state = state_machine[temp]
                 except:
                     self.database_control.print_data()
