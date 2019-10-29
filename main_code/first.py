@@ -10,7 +10,7 @@ state_machine = {
     3:'change',#
     4:'delete',#
     5:'end',#
-    6:'search',
+    6:'done',
     7:'change_to_daily',
     8:'change_to_normal',
 }
@@ -42,9 +42,12 @@ class Main_control_machine(object):
                 self.state = temp_database.insert_into_database()
             elif self.state == 'delete':
                 self.state=temp_database.delete_id_row(temp_table)
-            elif self.state == 'search':
-                pass
-                #self.state = temp_database
+            elif self.state == 'done':
+                if temp_database == self.daily_table_control:
+                    self.state = self.daily_table_control.done()
+                else:
+                    print("Can't do this in events_arrangement")
+                    self.state = state_machine[1]
             elif self.state == 'change':
                 self.state = temp_database.change_database()
             elif self.state == 'change_to_daily':

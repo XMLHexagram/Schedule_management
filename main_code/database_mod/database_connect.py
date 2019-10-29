@@ -19,14 +19,12 @@ state_machine = {
     3:'change',
     4:'delete',
     5:'end',
-    6:'search',
+    6:'done',
     7:'change_to_daily',
     8:'change_to_normal',
 }
 
 class Database_control(object):
-    def __init__(self):
-        pass
 
     def print_data(self,temp_table):
         os.system('cls')
@@ -156,7 +154,8 @@ class Database_control(object):
 
     def _connect_database(self):
         try:
-            self.db = pymysql.connect("121.199.40.243","YuanCheng_user","_Hexagram_user","test_python")
+            self.db = pymysql.connect("121.199.40.243","YuanCheng_user", \
+                "_Hexagram_user","test_python")
             self.cursor = self.db.cursor()
         except:
             time.sleep(3)
@@ -166,10 +165,16 @@ class Database_control(object):
         self.db.close()
 
 class daily_table_control(Database_control):
+    def __init__(self):
+        self.done_id_list = []
+        self._read_done_form_file()
+
     def _direct_print(self,temp):
         table = prettytable.PrettyTable(["ID","事务内容", \
             "推荐时间点","额外附加"])
         for row in temp:
+            if str(row[0]) in self.done_id_list:
+                continue
             _id = row[0]
             _title = row[1]
             do_it_time = str(row[2])
@@ -224,8 +229,26 @@ class daily_table_control(Database_control):
             WHERE id=%d  
             """ % (colums[temp],temp_input,temp_id)
         self._direct_database_control(sql)
-        
         return state_machine[1]
+
+    def _insert_daily_done_id_into_file(self,id):
+        path1 = os.path.abspath('.')
+        # print(path1)
+        path1 = path1 + '/main_code/database_log/daily_log/daily_done_id'
+        # print(path1)
+        f = open(path1,mode='a+',encoding='utf-8')
+        f.write("%s " % (id))
+        f.close
+
+    def _read_done_form_file(self):
+        path1 = os.path.abspath('.')
+        # print(path1)
+        path1 = path1 + '/main_code/database_log/daily_log/daily_done_id'
+        # print(path1)
+        f = open(path1,mode='r',encoding='utf-8')
+        temp_str = f.read()
+        f.close
+        self.done_id_list = temp_str.split(" ")
 
     def _insert_into_file(self,file_neirong):
         sth_to_say = input("please say sth about this events:\n")
@@ -238,3 +261,17 @@ class daily_table_control(Database_control):
         f = open(path1,mode='a+',encoding='utf-8')
         f.write("\n\n%s\n%s" % (temp,sth_to_say))
         f.close
+
+    def done(self):
+        id = input("please which id of events has been done:")
+        self._insert_daily_done_id_into_file(id)
+        sql = """
+            SELECT * FROM daily_events_arrangement
+            WHERE id = %d
+            """ % (int(id))
+        self._direct_database_control(sql)
+        results = self.cursor.fetchall()
+        self._insert_into_file(results)
+        self._read_done_form_file()
+
+        return state_machine[1]
