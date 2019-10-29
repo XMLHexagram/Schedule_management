@@ -41,7 +41,7 @@ class Main_control_machine(object):
             elif self.state == 'insert':
                 self.state = temp_database.insert_into_database()
             elif self.state == 'delete':
-                self.state=temp_database.delete_id_row()
+                self.state=temp_database.delete_id_row(temp_table)
             elif self.state == 'search':
                 pass
                 #self.state = temp_database

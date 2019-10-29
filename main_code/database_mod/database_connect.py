@@ -51,8 +51,8 @@ class Database_control(object):
             4:'extre_sth'
         }
         temp_id = int(input("please the id you want to change:"))
-        temp=int(input("""please what you want to change\n 
-(end_time:1, sth_title:2, advance_warning_time:3,extre_sth:4):"""))
+        temp=int(input("please what you want to change\n \
+            (end_time:1, sth_title:2, advance_warning_time:3,extre_sth:4):"))
         
         if temp == 1:
             temp_input = input("end_time:\n")
@@ -100,20 +100,20 @@ class Database_control(object):
         return state_machine[1]
 
     @log
-    def delete_id_row(self):
+    def delete_id_row(self,temp_table):
         row_id = int(input("Which id do you want to delete:"))
         sql = """
-            SELECT * FROM events_arrangement
+            SELECT * FROM %s
             WHERE id = %d
-            """ % (row_id)
+            """ % (temp_table,row_id)
         self._direct_database_control(sql)
         results = self.cursor.fetchall()
         self._insert_into_file(results)
 
         sql = """
-            DELETE FROM events_arrangement
+            DELETE FROM %s
             WHERE id = %d
-            """ % (row_id)
+            """ % (temp_table,row_id)
         self._direct_database_control(sql)
         return state_machine[1]
 
@@ -146,10 +146,11 @@ class Database_control(object):
     def _insert_into_file(self,file_neirong):
         sth_to_say = input("please say sth about this events:\n")
         path1 = os.path.abspath('.')
-        path1 = path1 + '/main_code/database_log/log.txt'
+        # print(path1)
+        path1 = path1 + '/main_code/database_log/normal_log.txt'
         # print(path1)
         temp = self._direct_print(file_neirong)
-        f = open(path1,mode='a',encoding='utf-8')
+        f = open(path1,mode='a+',encoding='utf-8')
         f.write("\n\n%s\n%s" % (temp,sth_to_say))
         f.close
 
@@ -206,8 +207,8 @@ class daily_table_control(Database_control):
             3:'extre_sth',
         }
         temp_id = int(input("please the id you want to change:"))
-        temp=int(input("""please what you want to change\n 
-(sth_title:1, events_do_it_time:2, extre_sth:3):"""))
+        temp=int(input("please what you want to change\n \
+            (sth_title:1, events_do_it_time:2, extre_sth:3):"))
         
         if temp == 1:
             temp_input = input("sth_title:\n")
@@ -225,3 +226,15 @@ class daily_table_control(Database_control):
         self._direct_database_control(sql)
         
         return state_machine[1]
+
+    def _insert_into_file(self,file_neirong):
+        sth_to_say = input("please say sth about this events:\n")
+        path1 = os.path.abspath('.')
+        # print(path1)
+        day_time = time.strftime("%Y_%m_%d",time.localtime())
+        path1 = path1 + '/main_code/database_log/daily_log/%s' % day_time
+        # print(path1)
+        temp = self._direct_print(file_neirong)
+        f = open(path1,mode='a+',encoding='utf-8')
+        f.write("\n\n%s\n%s" % (temp,sth_to_say))
+        f.close
