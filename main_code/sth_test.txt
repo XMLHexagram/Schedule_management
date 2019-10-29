@@ -7,3 +7,13 @@ CREATE TABLE `events_arrangement`(
     `extre_sth` VARCHAR(300) not NULL,
     PRIMARY KEY ( `id` )
     )ENGINE=InnoDB DEFAULT CHARSET=utf8; 
+
+
+
+CREATE TABLE `daily_events_arrangement`(
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `events_title` VARCHAR(600) NOT NULL,
+    `events_do_it_time` time,
+    `extre_sth` VARCHAR(300) not NULL,
+    PRIMARY KEY ( `id` )
+    )ENGINE=InnoDB DEFAULT CHARSET=utf8; 
