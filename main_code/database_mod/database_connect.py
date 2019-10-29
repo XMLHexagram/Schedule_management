@@ -52,7 +52,7 @@ class Database_control(object):
         }
         temp_id = int(input("please the id you want to change:"))
         temp=int(input("""please what you want to change\n 
-            (end_time:1, sth_title:2, advance_warning_time:3,extre_sth:4):"""))
+(end_time:1, sth_title:2, advance_warning_time:3,extre_sth:4):"""))
         
         if temp == 1:
             temp_input = input("end_time:\n")
@@ -182,7 +182,7 @@ class daily_table_control(Database_control):
     @log
     def insert_into_database(self):
         title = input("please input sth:\n")
-        events_to_do_time = input("please input events_to_do_time,\": :\":"  )
+        events_to_do_time = input("please input events_to_do_time,\": :\":\n")
         if events_to_do_time == '':
             events_to_do_time = '00:00:00'
 
@@ -196,4 +196,32 @@ class daily_table_control(Database_control):
             """ % (title,events_to_do_time,extre_sth)
             #print(sql)
         self._direct_database_control(sql)
+        return state_machine[1]
+
+    @log
+    def change_database(self):
+        colums = {
+            1:'events_title',
+            2:'events_do_it_time',
+            3:'extre_sth',
+        }
+        temp_id = int(input("please the id you want to change:"))
+        temp=int(input("""please what you want to change\n 
+(sth_title:1, events_do_it_time:2, extre_sth:3):"""))
+        
+        if temp == 1:
+            temp_input = input("sth_title:\n")
+        elif temp == 2:
+            temp_input = input("events_do_it_time:\n")
+        else:
+            #temp == 3
+            temp_input = input("extre_sth\n")
+        sql = \
+            """
+            UPDATE daily_events_arrangement
+            SET %s='%s'
+            WHERE id=%d  
+            """ % (colums[temp],temp_input,temp_id)
+        self._direct_database_control(sql)
+        
         return state_machine[1]
