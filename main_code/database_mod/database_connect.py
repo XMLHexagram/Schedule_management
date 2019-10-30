@@ -262,6 +262,14 @@ class daily_table_control(Database_control):
         f.write("\n\n%s\n%s" % (temp,sth_to_say))
         f.close
 
+    def reflesh_daily_done(self):
+        path1 = os.path.abspath('.')
+        # print(path1)
+        path1 = path1 + '/main_code/database_log/daily_log/daily_done_id'
+        # print(path1)
+        f = open(path1,mode='w',encoding='utf-8')
+        f.close
+        
     def done(self):
         id = input("please which id of events has been done:")
         self._insert_daily_done_id_into_file(id)
