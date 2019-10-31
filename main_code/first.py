@@ -13,6 +13,7 @@ state_machine = {
     6:'done',
     7:'change_to_daily',
     8:'change_to_normal',
+    9:'temp'
 }
 
 table_state = {
@@ -59,6 +60,10 @@ class Main_control_machine(object):
                 self.state = state_machine[1]
                 temp_table = table_state[1]
                 temp_database = self.database_control
+                continue
+            elif self.state == 'temp':
+                self.daily_table_control.reflesh_daily_done()
+                self.state = state_machine[1]
                 continue
             # else:
             #     temp_database.end_connect()

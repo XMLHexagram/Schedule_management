@@ -22,6 +22,7 @@ state_machine = {
     6:'done',
     7:'change_to_daily',
     8:'change_to_normal',
+    9:'temp'
 }
 
 class Database_control(object):
@@ -269,6 +270,7 @@ class daily_table_control(Database_control):
         # print(path1)
         f = open(path1,mode='w',encoding='utf-8')
         f.close
+        self._read_done_form_file()
         
     def done(self):
         id = input("please which id of events has been done:")
