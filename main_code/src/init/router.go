@@ -19,7 +19,7 @@ func (s *Serve) RouterInit() {
 		temp.POST("/add",s.addAffair) //增
 		temp.DELETE("/:id",s.deleteAffair) //删
 		temp.PUT("/:id",s.modifyAffair) //改
-		temp.POST("/find/:id",s.findAffair) //查
+		temp.GET("/find/:id",s.findAffair) //查
 	}
 
 	s.Router = r

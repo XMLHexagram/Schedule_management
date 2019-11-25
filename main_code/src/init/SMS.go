@@ -3,6 +3,7 @@ package init
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	dealError "main/deal_error"
 )
 
@@ -12,18 +13,18 @@ type input struct {
 	ExtraTips      string `json:"extra_tips"`
 }
 
-func (s *Serve)getAllAffairs(c *gin.Context)  {
+func (s *Serve) getAllAffairs(c *gin.Context) {
 	data := s.DB.Where(&affair{}).Find(&affair{})
-	c.JSON(makeSuccessReturn(200,data))
+	c.JSON(makeSuccessReturn(200, data))
 	return
 }
 
-func (s *Serve)addAffair (c *gin.Context) {
+func (s *Serve) addAffair(c *gin.Context) {
 	temp := new(input)
 	err := c.BindJSON(temp)
 	dealError.DealError(err)
 	if err != nil {
-		c.JSON(makeErrorReturn(300,30000,"wrong format"))
+		c.JSON(makeErrorReturn(300, 30000, "wrong format"))
 		return
 	}
 
@@ -34,44 +35,79 @@ func (s *Serve)addAffair (c *gin.Context) {
 		ExtraTips:      temp.ExtraTips,
 	}).RowsAffected != 1 {
 		tx.Rollback()
-		c.JSON(makeErrorReturn(400,40000,"can't add it"))
+		c.JSON(makeErrorReturn(400, 40000, "can't add it"))
 		return
 	}
 	tx.Commit()
-	makeSuccessReturn(200,"")
+	c.JSON(makeSuccessReturn(200, ""))
 	return
 }
 
-func (s *Serve)deleteAffair (c *gin.Context){
-	var id int
-	err := c.ShouldBindUri(&id)
-	if err != nil {
-		c.JSON(makeErrorReturn(300,30000,"wrong format"))
+func (s *Serve) deleteAffair(c *gin.Context) {
+	id,err := analysiID(c)
+	if  err != nil{
+		return
+	}
+	temp := new(affair)
+	s.DB.Where(gorm.Model{ID:id}).Find(temp)
+	if temp.EventsTitle == "" {
+		c.JSON(makeErrorReturn(300,30000,"affair doesn't exist"))
+		return
+	}
+	
+	tx := s.DB.Begin()
+	if tx.Where(gorm.Model{ID:id}).Delete(&affair{}).RowsAffected != 1 {
+		tx.Rollback()
+		c.JSON(makeErrorReturn(400,40000,"can't delete it"))
+		return
+	}
+	tx.Commit()
+	c.JSON(makeSuccessReturn(200,""))
+	return
+}
+
+func (s *Serve) modifyAffair(c *gin.Context) {
+
+}
+
+func (s *Serve) findAffair(c *gin.Context) {
+	id,err := analysiID(c)
+	if err != nil{
+		return
+	}
+	temp:= new(affair)
+	s.DB.Where(gorm.Model{ID: id}).Find(temp)
+	if temp.EventsTitle == "" {
+		c.JSON(makeErrorReturn(300,30000,""))
 		return
 	}
 
-	temp := s.DB
+	c.JSON(makeSuccessReturn(200,temp))
+	return
 }
 
-func (s *Serve)modifyAffair (c *gin.Context){
-
-}
-
-func (s *Serve)findAffair (c *gin.Context){
-
-}
-
-func makeSuccessReturn(status int,data interface{}) (int,interface{}){
-	return status,gin.H{
-		"error":0,
-		"msg":"success",
-		"data":data,
+func makeSuccessReturn(status int, data interface{}) (int, interface{}) {
+	return status, gin.H{
+		"error": 0,
+		"msg":   "success",
+		"data":  data,
 	}
 }
 
-func makeErrorReturn(status int,error int,msg string) (int,interface{}) {
-	return status,gin.H{
-		"error":error,
-		"msg":msg,
+func makeErrorReturn(status int, error int, msg string) (int, interface{}) {
+	return status, gin.H{
+		"error": error,
+		"msg":   msg,
+	}
+}
+
+func analysiID(c *gin.Context)  (uint,error){
+	var id uint
+	err := c.ShouldBindUri(&id)
+	if err != nil {
+		c.JSON(makeErrorReturn(300, 30000, "wrong format"))
+		return id,err
+	} else {
+		return id,err
 	}
 }
