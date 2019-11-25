@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*- j
 import sys
 import database_mod.database_connect
-
 # 状态机 #代表已完成功能
 state_machine = {
     1:'spare', #
