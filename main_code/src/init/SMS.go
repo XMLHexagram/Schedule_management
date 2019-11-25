@@ -77,6 +77,7 @@ func (s *Serve) modifyAffair(c *gin.Context) {
 
 	temp := new(affair)
 	s.DB.Model(&affair{}).Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
+	//s.DB.Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
 	if temp.EventsTitle == "" {
 		c.JSON(makeErrorReturn(300, 30000, "affair doesn't exist"))
 		return
@@ -89,6 +90,7 @@ func (s *Serve) modifyAffair(c *gin.Context) {
 	}
 	tx := s.DB.Begin()
 	if tx.Model(&affair{}).Where(&affair{Model:gorm.Model{ID: id}}).Updates(affair{
+	//if tx.Where(&affair{Model: gorm.Model{ID: id}}).Updates(affair{
 		EventsTitle:    temp.EventsTitle,
 		EventsDeadline: temp.EventsDeadline,
 		ExtraTips:      temp.ExtraTips,
@@ -108,7 +110,8 @@ func (s *Serve) findAffair(c *gin.Context) {
 	}
 	fmt.Println(id)
 	temp := new(affair)
-	s.DB.Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
+	//s.DB.Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
+	s.DB.Where("ID = ?",id).Find(temp)
 	if temp.EventsTitle == "" {
 		c.JSON(makeErrorReturn(300, 30000, ""))
 		return
