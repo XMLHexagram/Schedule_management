@@ -2,9 +2,11 @@
 package init
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	dealError "main/deal_error"
+	"strconv"
 )
 
 type input struct {
@@ -14,7 +16,8 @@ type input struct {
 }
 
 func (s *Serve) getAllAffairs(c *gin.Context) {
-	data := s.DB.Where(&affair{}).Find(&affair{})
+	data := make([]*affair, 100)
+	s.DB.Find(&data)
 	c.JSON(makeSuccessReturn(200, data))
 	return
 }
@@ -44,45 +47,74 @@ func (s *Serve) addAffair(c *gin.Context) {
 }
 
 func (s *Serve) deleteAffair(c *gin.Context) {
-	id,err := analysiID(c)
-	if  err != nil{
+	id, err := analysisID(c)
+	if err != nil {
 		return
 	}
 	temp := new(affair)
-	s.DB.Where(gorm.Model{ID:id}).Find(temp)
+	s.DB.Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
 	if temp.EventsTitle == "" {
-		c.JSON(makeErrorReturn(300,30000,"affair doesn't exist"))
+		c.JSON(makeErrorReturn(300, 30000, "affair doesn't exist"))
 		return
 	}
-	
+
 	tx := s.DB.Begin()
-	if tx.Where(gorm.Model{ID:id}).Delete(&affair{}).RowsAffected != 1 {
+	if tx.Where(&affair{Model: gorm.Model{ID: id}}).Delete(&affair{}).RowsAffected != 1 {
 		tx.Rollback()
-		c.JSON(makeErrorReturn(400,40000,"can't delete it"))
+		c.JSON(makeErrorReturn(400, 40000, "can't delete it"))
 		return
 	}
 	tx.Commit()
-	c.JSON(makeSuccessReturn(200,""))
+	c.JSON(makeSuccessReturn(200, ""))
 	return
 }
 
 func (s *Serve) modifyAffair(c *gin.Context) {
+	id, err := analysisID(c)
+	if err != nil {
+		return
+	}
 
+	temp := new(affair)
+	s.DB.Model(&affair{}).Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
+	if temp.EventsTitle == "" {
+		c.JSON(makeErrorReturn(300, 30000, "affair doesn't exist"))
+		return
+	}
+
+	err = c.BindJSON(temp)
+	if err != nil {
+		c.JSON(makeErrorReturn(300, 30000, "wrong format"))
+		return
+	}
+	tx := s.DB.Begin()
+	if tx.Model(&affair{}).Where(&affair{Model:gorm.Model{ID: id}}).Updates(affair{
+		EventsTitle:    temp.EventsTitle,
+		EventsDeadline: temp.EventsDeadline,
+		ExtraTips:      temp.ExtraTips,
+	}).RowsAffected != 1 {
+		c.JSON(makeErrorReturn(400, 40000, "can't update it"))
+		return
+	}
+	tx.Commit()
+	c.JSON(makeSuccessReturn(200, 20000))
+	return
 }
 
 func (s *Serve) findAffair(c *gin.Context) {
-	id,err := analysiID(c)
-	if err != nil{
+	id, err := analysisID(c)
+	if err != nil {
 		return
 	}
-	temp:= new(affair)
-	s.DB.Where(gorm.Model{ID: id}).Find(temp)
+	fmt.Println(id)
+	temp := new(affair)
+	s.DB.Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
 	if temp.EventsTitle == "" {
-		c.JSON(makeErrorReturn(300,30000,""))
+		c.JSON(makeErrorReturn(300, 30000, ""))
 		return
 	}
 
-	c.JSON(makeSuccessReturn(200,temp))
+	c.JSON(makeSuccessReturn(200, temp))
 	return
 }
 
@@ -101,13 +133,13 @@ func makeErrorReturn(status int, error int, msg string) (int, interface{}) {
 	}
 }
 
-func analysiID(c *gin.Context)  (uint,error){
-	var id uint
-	err := c.ShouldBindUri(&id)
+func analysisID(c *gin.Context) (uint, error) {
+	var id int
+	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.JSON(makeErrorReturn(300, 30000, "wrong format"))
-		return id,err
+		return uint(id), err
 	} else {
-		return id,err
+		return uint(id), err
 	}
 }
