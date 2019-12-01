@@ -2,7 +2,8 @@
 Address = "121.199.40.243"
 User = "YuanCheng_user"
 Password  = "_Hexagram_user"
-DBName = "go_test"
+DBName = "test_python"
+#DBName = "go_test"
 
 [Web]
 Port = ":1221"

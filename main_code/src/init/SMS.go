@@ -35,7 +35,7 @@ func (s *Serve) addAffair(c *gin.Context) {
 	if tx.Create(&affair{
 		EventsTitle:    temp.EventsTitle,
 		EventsDeadline: temp.EventsDeadline,
-		ExtraTips:      temp.ExtraTips,
+		ExtreSth:       temp.ExtraTips,
 	}).RowsAffected != 1 {
 		tx.Rollback()
 		c.JSON(makeErrorReturn(400, 40000, "can't add it"))
@@ -93,7 +93,7 @@ func (s *Serve) modifyAffair(c *gin.Context) {
 	//if tx.Where(&affair{Model: gorm.Model{ID: id}}).Updates(affair{
 		EventsTitle:    temp.EventsTitle,
 		EventsDeadline: temp.EventsDeadline,
-		ExtraTips:      temp.ExtraTips,
+		ExtreSth:       temp.ExtreSth,
 	}).RowsAffected != 1 {
 		c.JSON(makeErrorReturn(400, 40000, "can't update it"))
 		return

@@ -12,7 +12,7 @@ type affair struct {
 	gorm.Model
 	EventsTitle    string `json:"events_title"`
 	EventsDeadline string `json:"events_deadline"`
-	ExtraTips      string `json:"extra_tips"`
+	ExtreSth       string `json:"extre_sth"`
 }
 
 func (s *Serve) DBInit()  {
