@@ -3,33 +3,12 @@
 	<head>
 		<meta charset="utf-8">
 		<script src="vue.js" type="text/javascript" charset="UTF-8"></script>
-		<!-- <script src="main.js" type="text/javascript"></script> -->
-		<script src="https://cdn.staticfile.org/axios/0.18.0/axios.js"></script>
+		<script src="main.js" type="text/javascript"></script>
 		<title></title>
 	</head>
 	<body>
 			<div id="app">
-				aaaaa
 				{{ info }}
 			</div>
-
-		<script type="text/javascript">
-			new Vue({
-				el: '#app',
-				data() {
-					return {
-						info: null
-					}
-				},
-				mounted() {
-					axios
-						.get('https://localhost:1221/allAffairs')
-						.then(response => (this.info = response.data.sites))
-						.catch(function(error) { // 请求失败处理
-							console.log(error);
-						});
-				}
-			})
-		</script>
 	</body>
 </html>
