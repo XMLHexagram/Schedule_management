@@ -14,6 +14,7 @@ func (s *Serve) RouterInit() {
 	r.Use(cors.Default())
 
 	r.GET("/allAffairs", s.getAllAffairs)
+	r.GET("/dailyEvents",s.getDailyEvents)
 	temp := r.Group("/opera")
 	{
 		temp.POST("/add",s.addAffair) //增

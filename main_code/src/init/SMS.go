@@ -15,6 +15,13 @@ type input struct {
 	Extra    string `json:"tips"`
 }
 
+func (s *Serve) getDailyEvents(c *gin.Context) {
+	data := make([]*dailyEvent,100)
+	s.DB.Find(&data)
+	c.JSON(makeSuccessReturn(200,data))
+	return
+}
+
 func (s *Serve) getAllAffairs(c *gin.Context) {
 	data := make([]*affair, 100)
 	s.DB.Find(&data)

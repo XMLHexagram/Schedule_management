@@ -15,6 +15,11 @@ type affair struct {
 	Extra    string
 }
 
+type dailyEvent struct {
+	Title string
+	Extra string
+}
+
 func (s *Serve) DBInit()  {
 	strDb := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		s.Config.DB.User,

@@ -1,9 +1,11 @@
 <template>
     <div id="app" style="">
         <!-- <div id="app2"> -->
-
+        <div>
+            <Daily></Daily>
+        </div>
         <!-- </div> -->
-        <div class="row at-row flex-center" >
+        <div class="row at-row flex-center" style="position: relative;top: 20px">
             <div class="col-md-4">
                 <div class="at-box-row bg-c-brand-dark common">ID</div>
             </div>
@@ -77,10 +79,11 @@
 <script>
     import axios from 'axios';
     import InputForm from "./components/InputForm";
+    import Daily from "./components/daily"
 
     export default {
         name: 'app',
-        components: {InputForm},
+        components: {Daily, InputForm},
         data() {
             let Title;
             let Extra;
