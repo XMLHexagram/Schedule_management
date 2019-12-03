@@ -95,6 +95,7 @@ func (s *Serve) modifyAffair(c *gin.Context) {
 		EventsDeadline: temp.EventsDeadline,
 		ExtreSth:       temp.ExtreSth,
 	}).RowsAffected != 1 {
+		tx.Rollback()
 		c.JSON(makeErrorReturn(400, 40000, "can't update it"))
 		return
 	}

@@ -1,5 +1,5 @@
 <template>
-    <div class="row at-row flex-center">
+    <div class="row at-row" style="float: left">
         <!--        <input v-model="nowYear">-->
         <!--        <p>{{nowYear}}</p>-->
         <at-card style="width: 600px">
