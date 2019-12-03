@@ -82,7 +82,7 @@
             addAffair: function () {
                 axios({
                     method: 'post',
-                    url: 'http://localhost:1221/opera/add',
+                    url: 'http://121.199.40.243:1221/opera/add',
                     data: {
                         Title: this.Title,
                         Deadline: this.nowYear + "/" + this.nowMouth + "/" + this.nowDay + " " + this.nowHour + "/" + this.nowMinute + "/" + this.nowSecond,

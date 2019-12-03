@@ -100,7 +100,7 @@
         methods: {
             deleteAffairs: function (ID) {
                 // alert(ID);
-                axios.delete('http://localhost:1221/opera/' + ID).then(() => {
+                axios.delete('http://121.199.40.243:1221/opera/' + ID).then(() => {
                     this.getAllAffairs()
                 })
             },
@@ -123,7 +123,7 @@
                 // this.getAllAffairs();
             },
             getAllAffairs: function () {
-                axios.get('http://localhost:1221/allAffairs').then(res => {
+                axios.get('http://121.199.40.243:1221/allAffairs').then(res => {
                     this.affairs = res.data.data
                     // console.log(this.affairs)
                 }).catch(err => {
@@ -133,7 +133,7 @@
             pushModifyAffair: function () {
                 axios({
                     method: 'put',
-                    url: 'http://localhost:1221/opera/' + this.ID_,
+                    url: 'http://121.199.40.243:1221/opera/' + this.ID_,
                     data: {
                         Title: this.Title,
                         Deadline: this.Deadline,
