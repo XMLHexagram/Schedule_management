@@ -10,9 +10,9 @@ import (
 )
 
 type input struct {
-	EventsTitle    string `json:"events_title"`
-	EventsDeadline string `json:"events_deadline"`
-	ExtraTips      string `json:"extra_tips"`
+	Title    string `json:"title"`
+	Deadline string `json:"deadline"`
+	Extra    string `json:"tips"`
 }
 
 func (s *Serve) getAllAffairs(c *gin.Context) {
@@ -33,9 +33,9 @@ func (s *Serve) addAffair(c *gin.Context) {
 
 	tx := s.DB.Begin()
 	if tx.Create(&affair{
-		EventsTitle:    temp.EventsTitle,
-		EventsDeadline: temp.EventsDeadline,
-		ExtreSth:       temp.ExtraTips,
+		Title:    temp.Title,
+		Deadline: temp.Deadline,
+		Extra:    temp.Extra,
 	}).RowsAffected != 1 {
 		tx.Rollback()
 		c.JSON(makeErrorReturn(400, 40000, "can't add it"))
@@ -53,7 +53,7 @@ func (s *Serve) deleteAffair(c *gin.Context) {
 	}
 	temp := new(affair)
 	s.DB.Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
-	if temp.EventsTitle == "" {
+	if temp.Title == "" {
 		c.JSON(makeErrorReturn(300, 30000, "affair doesn't exist"))
 		return
 	}
@@ -78,7 +78,7 @@ func (s *Serve) modifyAffair(c *gin.Context) {
 	temp := new(affair)
 	s.DB.Model(&affair{}).Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
 	//s.DB.Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
-	if temp.EventsTitle == "" {
+	if temp.Title == "" {
 		c.JSON(makeErrorReturn(300, 30000, "affair doesn't exist"))
 		return
 	}
@@ -91,9 +91,9 @@ func (s *Serve) modifyAffair(c *gin.Context) {
 	tx := s.DB.Begin()
 	if tx.Model(&affair{}).Where(&affair{Model:gorm.Model{ID: id}}).Updates(affair{
 	//if tx.Where(&affair{Model: gorm.Model{ID: id}}).Updates(affair{
-		EventsTitle:    temp.EventsTitle,
-		EventsDeadline: temp.EventsDeadline,
-		ExtreSth:       temp.ExtreSth,
+		Title:    temp.Title,
+		Deadline: temp.Deadline,
+		Extra:    temp.Extra,
 	}).RowsAffected != 1 {
 		tx.Rollback()
 		c.JSON(makeErrorReturn(400, 40000, "can't update it"))
@@ -113,7 +113,7 @@ func (s *Serve) findAffair(c *gin.Context) {
 	temp := new(affair)
 	//s.DB.Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
 	s.DB.Where("ID = ?",id).Find(temp)
-	if temp.EventsTitle == "" {
+	if temp.Title == "" {
 		c.JSON(makeErrorReturn(300, 30000, ""))
 		return
 	}

@@ -7,8 +7,8 @@
             <div>
                 <!--                <p>{{this.nowTime}}</p>-->
                 <form>
-                    <at-input v-model="eventTitle" placeholder="events_title" style="width: 500px"></at-input>
-                    <at-input v-model="extraSth" placeholder="extra_sth" style="width: 500px"></at-input>
+                    <at-input v-model="Title" placeholder="Title" style="width: 500px"></at-input>
+                    <at-input v-model="Extra" placeholder="Extra" style="width: 500px"></at-input>
                     <!--                    <at-input-number :min="1" :max="12"></at-input-number>-->
                     <div class="row at-row">
                         <div class="col-sm-12 col-md-4">
@@ -49,12 +49,12 @@
     export default {
         name: "InputForm",
         data() {
-            let eventTitle;
-            let extraSth;
+            let Title;
+            let Extra;
             return {
                 // nowTime:{},
-                eventTitle,
-                extraSth,
+                Title,
+                Extra,
                 nowYear: {},
                 nowMouth: {},
                 nowDay: {},
@@ -84,9 +84,9 @@
                     method: 'post',
                     url: 'http://localhost:1221/opera/add',
                     data: {
-                        events_title: this.eventTitle,
-                        events_deadline: this.nowYear + "/" + this.nowMouth + "/" + this.nowDay + " " + this.nowHour + "/" + this.nowMinute + "/" + this.nowSecond,
-                        extra_tips: this.extraSth
+                        Title: this.Title,
+                        Deadline: this.nowYear + "/" + this.nowMouth + "/" + this.nowDay + " " + this.nowHour + "/" + this.nowMinute + "/" + this.nowSecond,
+                        Extra: this.Extra
                     }
                 });
             },

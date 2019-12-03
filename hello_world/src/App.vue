@@ -1,32 +1,9 @@
 <template>
     <div id="app" style="">
         <!-- <div id="app2"> -->
-        <div class="row at-row flex-around" style="position:relative;top: -50px">
-            <div class="col-md-12">
-                <InputForm></InputForm>
-            </div>
-
-
-            <div class="col-md-12">
-                <at-card style="width: 600px">
-                    <h4>修改事务</h4>
-                    <div>
-                        <!--                <p>{{this.nowTime}}</p>-->
-                        <form>
-                            <at-input v-model="eventTitle" placeholder="events_title" style="width: 500px"></at-input>
-                            <at-input v-model="extraSth" placeholder="extra_sth" style="width: 500px"></at-input>
-                            <!--                    <at-input-number :min="1" :max="12"></at-input-number>-->
-                            <at-input v-model="deadline" placeholder="deadline" style="width: 500px"></at-input>
-                            <at-button v-on:click="pushModifyAffair()" style="float: left"></at-button>
-                            <at-button v-on:click="getAllAffairs"></at-button>
-                        </form>
-                    </div>
-                </at-card>
-            </div>
-        </div>
 
         <!-- </div> -->
-        <div class="row at-row" style="position: relative;left: 39px;top:-20px">
+        <div class="row at-row flex-center" >
             <div class="col-md-4">
                 <div class="at-box-row bg-c-brand-dark common">ID</div>
             </div>
@@ -42,6 +19,10 @@
             <div class="col-md-4">
                 <div class="at-box-row bg-c-brand-light common">附加内容</div>
             </div>
+            <at-button type="primary" style="float: left;">delete
+            </at-button>
+            <at-button type="primary" style="float: left;">modify
+            </at-button>
         </div>
 
         <div v-for="affair in affairs" :key="affair.ID">
@@ -50,21 +31,44 @@
                     <div class="at-box-row bg-c-brand-dark common">{{affair.ID}}</div>
                 </div>
                 <div class="col-md-4">
-                    <div class="at-box-row bg-c-brand-light common">{{affair.events_title}}</div>
+                    <div class="at-box-row bg-c-brand-light common">{{affair.Title}}</div>
                 </div>
                 <div class="col-md-4">
                     <div class="at-box-row bg-c-brand-light common">{{affair.CreatedAt}}</div>
                 </div>
                 <div class="col-md-4">
-                    <div class="at-box-row bg-c-brand-dark common">{{affair.events_deadline}}</div>
+                    <div class="at-box-row bg-c-brand-dark common">{{affair.Deadline}}</div>
                 </div>
                 <div class="col-md-4">
-                    <div class="at-box-row bg-c-brand-light common">{{affair.extre_sth}}</div>
+                    <div class="at-box-row bg-c-brand-light common">{{affair.Extra}}</div>
                 </div>
                 <at-button v-on:click="deleteAffairs(affair.ID)" type="primary" style="float: left;">delete
                 </at-button>
                 <at-button v-on:click="modifyAffairs(affair.ID)" type="primary" style="float: left;">modify
                 </at-button>
+            </div>
+        </div>
+        <div class="row at-row flex-center" style="position:relative;top: 30px">
+            <div class="col-md-12">
+                <InputForm></InputForm>
+            </div>
+
+
+            <div class="col-md-12">
+                <at-card style="width: 600px">
+                    <h4>修改事务</h4>
+                    <div>
+                        <!--                <p>{{this.nowTime}}</p>-->
+                        <form>
+                            <at-input v-model="Title" placeholder="Title" style="width: 500px"></at-input>
+                            <at-input v-model="Extra" placeholder="Extra" style="width: 500px"></at-input>
+                            <!--                    <at-input-number :min="1" :max="12"></at-input-number>-->
+                            <at-input v-model="Deadline" placeholder="Deadline" style="width: 500px"></at-input>
+                            <at-button v-on:click="pushModifyAffair()" style="float: left"></at-button>
+                            <at-button v-on:click="getAllAffairs"></at-button>
+                        </form>
+                    </div>
+                </at-card>
             </div>
         </div>
     </div>
@@ -78,15 +82,15 @@
         name: 'app',
         components: {InputForm},
         data() {
-            let eventTitle;
-            let extraSth;
-            let deadline;
+            let Title;
+            let Extra;
+            let Deadline;
             let ID_;
             return {
                 affairs: [],
-                eventTitle,
-                extraSth,
-                deadline,
+                Title,
+                Extra,
+                Deadline,
                 ID_,
             }
         },
@@ -106,9 +110,9 @@
                 while (i < 100) {
                     // alert(this.affairs[i].ID);
                     if (this.affairs[i].ID == ID) {
-                        this.deadline = this.affairs[i].events_deadline;
-                        this.eventTitle = this.affairs[i].events_title;
-                        this.extraSth = this.affairs[i].extre_sth;
+                        this.Deadline = this.affairs[i].Deadline;
+                        this.Title = this.affairs[i].Title;
+                        this.Extra = this.affairs[i].Extra;
                         break;
                     }
                     i++;
@@ -128,9 +132,9 @@
                     method: 'put',
                     url: 'http://localhost:1221/opera/' + this.ID_,
                     data: {
-                        events_title: this.eventTitle,
-                        events_deadline: this.deadline,
-                        extra_tips: this.extraSth
+                        Title: this.Title,
+                        Deadline: this.Deadline,
+                        Extra: this.Extra
                     }
                 }).then(() => {
                     this.getAllAffairs()

@@ -10,9 +10,9 @@ import (
 
 type affair struct {
 	gorm.Model
-	EventsTitle    string `json:"events_title"`
-	EventsDeadline string `json:"events_deadline"`
-	ExtreSth       string `json:"extre_sth"`
+	Title    string
+	Deadline string
+	Extra    string
 }
 
 func (s *Serve) DBInit()  {
