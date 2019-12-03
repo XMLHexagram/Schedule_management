@@ -106,3 +106,4 @@ venv.bak/
 #extra
 .vscode/
 .idea/
+main_code/back/src/go_build_main_go.exe
