@@ -121,7 +121,7 @@ func (s *Serve) findAffair(c *gin.Context) {
 	//s.DB.Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
 	s.DB.Where("ID = ?",id).Find(temp)
 	if temp.Title == "" {
-		c.JSON(makeErrorReturn(300, 30000, ""))
+		c.JSON(makeErrorReturn(300, 30000, "affair not exist"))
 		return
 	}
 
