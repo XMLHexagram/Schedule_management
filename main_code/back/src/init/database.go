@@ -6,12 +6,13 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"main/deal_error"
+	"time"
 )
 
 type affair struct {
 	gorm.Model
 	Title    string
-	Deadline string
+	Deadline time.Time
 	Extra    string
 }
 

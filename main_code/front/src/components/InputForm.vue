@@ -33,9 +33,9 @@
                             <at-input-number v-model="nowSecond" style="width: 35px"></at-input-number>
                             <!--                            <span>{{nowSecond}}</span>-->
                         </div>
-                    </div>
 
-                    <at-button v-on:click="addAffair()" style="float: left"></at-button>
+                        <at-button v-on:click="addAffair()">提交事务</at-button>
+                    </div>
                 </form>
             </div>
         </at-card>
@@ -80,12 +80,29 @@
                 this.nowSecond = temp.getSeconds();
             },
             addAffair: function () {
+                if (this.nowMouth < 10) {
+                    this.nowMouth = "0" + this.nowMouth;
+                }
+                if (this.nowDay < 10) {
+                    this.nowDay = "0" + this.nowDay;
+                }
+                if (this.nowHour < 10) {
+                    this.nowHour = "0" + this.nowHour;
+                }
+                if (this.nowMinute < 10) {
+                    this.nowMinute = "0" + this.nowMinute;
+                }
+                if (this.nowSecond < 10) {
+                    this.nowSecond = "0" + this.nowSecond;
+                }
+
                 axios({
                     method: 'post',
                     url: 'http://121.199.40.243:1221/opera/add',
+                    // url: 'http://localhost:1221/opera/add',
                     data: {
                         Title: this.Title,
-                        Deadline: this.nowYear + "/" + this.nowMouth + "/" + this.nowDay + " " + this.nowHour + "/" + this.nowMinute + "/" + this.nowSecond,
+                        Deadline: this.nowYear + "-" + this.nowMouth + "-" + this.nowDay + "T" + this.nowHour + ":" + this.nowMinute + ":" + this.nowSecond + "Z",
                         Extra: this.Extra
                     }
                 });

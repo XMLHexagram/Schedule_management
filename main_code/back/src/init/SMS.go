@@ -7,25 +7,45 @@ import (
 	"github.com/jinzhu/gorm"
 	dealError "main/deal_error"
 	"strconv"
+	"time"
 )
 
 type input struct {
-	Title    string `json:"title"`
-	Deadline string `json:"deadline"`
-	Extra    string `json:"tips"`
+	Title    string `json:"Title"`
+	Deadline time.Time `json:"Deadline"`
+	Extra    string `json:"Extra"`
+}
+
+type output struct {
+	ID uint `json:"ID"`
+	Title    string `json:"Title"`
+	Deadline string `json:"Deadline"`
+	Extra    string `json:"Extra"`
+	CreatedAt string `json:"CreatedAt"`
 }
 
 func (s *Serve) getDailyEvents(c *gin.Context) {
-	data := make([]*dailyEvent,100)
+	data := make([]*dailyEvent,0)
 	s.DB.Find(&data)
 	c.JSON(makeSuccessReturn(200,data))
 	return
 }
 
 func (s *Serve) getAllAffairs(c *gin.Context) {
-	data := make([]*affair, 100)
+	data := make([]*affair,0,100)
 	s.DB.Find(&data)
-	c.JSON(makeSuccessReturn(200, data))
+	out := make([]*output,0,100)
+	for _,v := range data {
+		out = append(out, &output{
+			ID:       v.ID,
+			Title:    v.Title,
+			Deadline: v.Deadline.Format("2006-01-02 15:04:05"),
+			Extra:    v.Extra,
+			CreatedAt:v.CreatedAt.Format("2006-01-02 15:04:05"),
+		})
+	}
+	//fmt.Println(out)
+	c.JSON(makeSuccessReturn(200, out))
 	return
 }
 
@@ -92,6 +112,7 @@ func (s *Serve) modifyAffair(c *gin.Context) {
 
 	err = c.BindJSON(temp)
 	if err != nil {
+		fmt.Println(err)
 		c.JSON(makeErrorReturn(300, 30000, "wrong format"))
 		return
 	}

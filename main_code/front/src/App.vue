@@ -5,51 +5,69 @@
             <Daily></Daily>
         </div>
         <!-- </div> -->
-        <div class="row at-row flex-center" style="position: relative;top: 20px">
-            <div class="col-md-4">
-                <div class="at-box-row bg-c-brand-dark common">ID</div>
-            </div>
-            <div class="col-md-4">
-                <div class="at-box-row bg-c-brand-light common">内容</div>
-            </div>
-            <div class="col-md-4">
-                <div class="at-box-row bg-c-brand-light common">创建时间</div>
-            </div>
-            <div class="col-md-4">
-                <div class="at-box-row bg-c-brand-dark common">截止时间</div>
-            </div>
-            <div class="col-md-4">
-                <div class="at-box-row bg-c-brand-light common">附加内容</div>
-            </div>
-            <at-button type="primary" style="float: left;">delete
-            </at-button>
-            <at-button type="primary" style="float: left;">modify
-            </at-button>
-        </div>
+        <!--        <div class="row at-row flex-center" style="position: relative;top: 20px">-->
+        <!--            <div class="col-md-4">-->
+        <!--                <div class="at-box-row bg-c-brand-dark common">ID</div>-->
+        <!--            </div>-->
+        <!--            <div class="col-md-4">-->
+        <!--                <div class="at-box-row bg-c-brand-light common">内容</div>-->
+        <!--            </div>-->
+        <!--            <div class="col-md-4">-->
+        <!--                <div class="at-box-row bg-c-brand-light common">创建时间</div>-->
+        <!--            </div>-->
+        <!--            <div class="col-md-4">-->
+        <!--                <div class="at-box-row bg-c-brand-dark common">截止时间</div>-->
+        <!--            </div>-->
+        <!--            <div class="col-md-4">-->
+        <!--                <div class="at-box-row bg-c-brand-light common">附加内容</div>-->
+        <!--            </div>-->
+        <!--            <at-button type="primary" style="float: left;">delete-->
+        <!--            </at-button>-->
+        <!--            <at-button type="primary" style="float: left;">modify-->
+        <!--            </at-button>-->
+        <!--        </div>-->
 
-        <div v-for="affair in affairs" :key="affair.ID">
-            <div class="row at-row flex-center">
-                <div class="col-md-4">
-                    <div class="at-box-row bg-c-brand-dark common">{{affair.ID}}</div>
-                </div>
-                <div class="col-md-4">
-                    <div class="at-box-row bg-c-brand-light common">{{affair.Title}}</div>
-                </div>
-                <div class="col-md-4">
-                    <div class="at-box-row bg-c-brand-light common">{{affair.CreatedAt}}</div>
-                </div>
-                <div class="col-md-4">
-                    <div class="at-box-row bg-c-brand-dark common">{{affair.Deadline}}</div>
-                </div>
-                <div class="col-md-4">
-                    <div class="at-box-row bg-c-brand-light common">{{affair.Extra}}</div>
-                </div>
-                <at-button v-on:click="deleteAffairs(affair.ID)" type="primary" style="float: left;">delete
-                </at-button>
-                <at-button v-on:click="modifyAffairs(affair.ID)" type="primary" style="float: left;">modify
-                </at-button>
+        <!--        <div v-for="affair in affairs" :key="affair.ID">-->
+        <!--            <div class="row at-row flex-center">-->
+        <!--                <div class="col-md-4">-->
+        <!--                    <div class="at-box-row bg-c-brand-dark common">{{affair.ID}}</div>-->
+        <!--                </div>-->
+        <!--                <div class="col-md-4">-->
+        <!--                    <div class="at-box-row bg-c-brand-light common">{{affair.Title}}</div>-->
+        <!--                </div>-->
+        <!--                <div class="col-md-4">-->
+        <!--                    <div class="at-box-row bg-c-brand-light common">{{affair.CreatedAt}}</div>-->
+        <!--                </div>-->
+        <!--                <div class="col-md-4">-->
+        <!--                    <div class="at-box-row bg-c-brand-dark common">{{affair.Deadline}}</div>-->
+        <!--                </div>-->
+        <!--                <div class="col-md-4">-->
+        <!--                    <div class="at-box-row bg-c-brand-light common">{{affair.Extra}}</div>-->
+        <!--                </div>-->
+        <!--                <at-button v-on:click="deleteAffairs(affair.ID)" type="primary" style="float: left;">delete-->
+        <!--                </at-button>-->
+        <!--                <at-button v-on:click="modifyAffairs(affair.ID)" type="primary" style="float: left;">modify-->
+        <!--                </at-button>-->
+        <!--            </div>-->
+        <!--        </div>-->
+        <div class="row at-row" style="position: relative;top:20px">
+            <div v-for="affair in affairs" :key="affair.ID">
+                <at-card style="width: 400px;">
+                    <!--                <div>{{affair.ID}}</div>-->
+                    <div slot="title"><h4>{{affair.Title}}</h4></div>
+                    <div>创建于:{{affair.CreatedAt}}</div>
+                    <div>Deadline:{{affair.Deadline}}</div>
+                    <div>{{affair.Extra}}</div>
+                    <div slot="extra">
+                        <at-button v-on:click="deleteAffairs(affair.ID)" size="small">delete
+                        </at-button>
+                        <at-button v-on:click="modifyAffairs(affair.ID)" size="small">modify
+                        </at-button>
+                    </div>
+                </at-card>
             </div>
         </div>
+        <!--    </div>-->
         <div class="row at-row flex-center" style="position:relative;top: 30px">
             <div class="col-md-12">
                 <InputForm></InputForm>
@@ -66,8 +84,8 @@
                             <at-input v-model="Extra" placeholder="Extra" style="width: 500px"></at-input>
                             <!--                    <at-input-number :min="1" :max="12"></at-input-number>-->
                             <at-input v-model="Deadline" placeholder="Deadline" style="width: 500px"></at-input>
-                            <at-button v-on:click="pushModifyAffair()" style="float: left"></at-button>
-                            <at-button v-on:click="getAllAffairs"></at-button>
+                            <at-button v-on:click="pushModifyAffair()" style="float: left">提交修改</at-button>
+                            <at-button v-on:click="getAllAffairs">刷新</at-button>
                         </form>
                     </div>
                 </at-card>
@@ -100,9 +118,11 @@
         methods: {
             deleteAffairs: function (ID) {
                 // alert(ID);
-                axios.delete('http://121.199.40.243:1221/opera/' + ID).then(() => {
+                // // axios.delete('http://121.199.40.243:1221/opera/' + ID).then(() => {
+                axios.delete('http://localhost:1221/opera/' + ID).then(() => {
                     this.getAllAffairs()
                 })
+                // }
             },
             modifyAffairs: function (ID) {
                 //回调
@@ -124,6 +144,7 @@
             },
             getAllAffairs: function () {
                 axios.get('http://121.199.40.243:1221/allAffairs').then(res => {
+                // axios.get('http://localhost:1221/allAffairs').then(res => {
                     this.affairs = res.data.data
                     // console.log(this.affairs)
                 }).catch(err => {
@@ -131,18 +152,24 @@
                 })
             },
             pushModifyAffair: function () {
+                let str, temp;
+                temp = this.Deadline + "";
+                str = temp.split(" ");
+                temp = str[0] + "T" + str[1] + "Z";
+
                 axios({
                     method: 'put',
                     url: 'http://121.199.40.243:1221/opera/' + this.ID_,
+                    // url: 'http://localhost:1221/opera/' + this.ID_,
                     data: {
                         Title: this.Title,
-                        Deadline: this.Deadline,
+                        Deadline: temp,
                         Extra: this.Extra
                     }
                 }).then(() => {
                     this.getAllAffairs()
                 })
-            }
+            },
         },
         mounted() {
             this.getAllAffairs();
