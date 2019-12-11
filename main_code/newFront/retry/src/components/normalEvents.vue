@@ -10,37 +10,80 @@
                 <cell :border="false" :title="affair.Title" :value="affair.Extra"/>
 
                 <template slot="right">
-                    <Button square type="danger" text="删除"/>
+                    <Button square type="danger" text="删除" v-on:click="deleteAffairs(affair.ID)"/>
                     <Button square type="primary" text="修改"/>
                 </template>
 
             </swipe-cell>
             <popup v-model="show" position="top" :style="{height:'20%'}">
-                <div>创建于:{{affair.CreatedAt}}</div>
-                <div>Deadline:{{affair.Deadline}}</div>
+                <CellGroup>
+                    <Cell>创建于:{{affair.CreatedAt}}</Cell>
+                    <Cell>Deadline:{{affair.Deadline}}</Cell>
+                </CellGroup>
             </popup>
         </div>
+
+        <Button plain type="info" v-on:click="show1=true">
+            添加事务
+        </Button>
+        <Overlay :show="show1">
+            <div class="wrapper">
+                <div class="block">
+                    <div>
+                        <CellGroup>
+                            <van-field
+                                    v-model="Title"
+                                    required
+                                    clearable
+                                    label="事务"
+                                    placeholder="Title"
+                            />
+
+                            <van-field
+                                    v-model="Extra"
+                                    label="附加"
+                                    placeholder="Extra"
+                            />
+                            <van-datetime-picker
+                                    v-model="Deadline"
+                                    :min-date="minDate"
+                                    :max-date="maxDate"
+                                    v-on:cancel="show1=false"
+                                    v-on:confirm="addEvents"/>
+                        </CellGroup>
+                    </div>
+                    <!--                    <Button plain type="info" v-on:click="show1=false">-->
+                    <!--                        退出-->
+                    <!--                    </Button>-->
+                    <!--                    <Button plain type="primary" v-on:click="addEvents">-->
+                    <!--                        提交-->
+                    <!--                    </Button>-->
+                </div>
+            </div>
+        </Overlay>
     </div>
 </template>
 
 <script>
     import axios from "axios";
-    import {SwipeCell, Cell, Popup, Button} from "vant";
+    import {SwipeCell, CellGroup, Cell, Popup, Button, Overlay} from "vant";
 
     export default {
-        components: {SwipeCell, Cell, Popup, Button},
+        components: {SwipeCell, CellGroup, Cell, Popup, Button, Overlay},
         name: "normalEvents",
         data() {
             let Title;
             let Extra;
-            let Deadline;
             let ID_;
             return {
                 show: false,
+                show1: false,
                 affairs: [],
                 Title,
                 Extra,
-                Deadline,
+                Deadline: new Date(),
+                minDate: new Date(),
+                maxDate: new Date(2020, 11, 31),
                 ID_,
             }
         },
@@ -50,8 +93,8 @@
             },
             deleteAffairs: function (ID) {
                 // alert(ID);
-                // // axios.delete('http://121.199.40.243:1221/opera/' + ID).then(() => {
-                axios.delete('http://localhost:1221/opera/' + ID).then(() => {
+                axios.delete('http://121.199.40.243:1221/opera/' + ID).then(() => {
+                    // axios.delete('http://localhost:1221/opera/' + ID).then(() => {
                     this.getAllAffairs()
                 })
                 // }
@@ -102,6 +145,20 @@
                     this.getAllAffairs()
                 })
             },
+            addEvents: function () {
+                axios({
+                    method: 'post',
+                    url: 'http://121.199.40.243:1221/opera/add',
+                    data: {
+                        Title: this.Title,
+                        Deadline: this.Deadline,
+                        Extra: this.Extra,
+                    }
+                }).then(() => {
+                    this.getAllAffairs();
+                    this.show1 = false;
+                })
+            },
         },
         mounted() {
             this.getAllAffairs();
@@ -110,5 +167,18 @@
 </script>
 
 <style scoped>
+    .wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+
+
+    .block {
+        width: 500px;
+        height: 500px;
+        background-color: #fff;
+    }
 
 </style>

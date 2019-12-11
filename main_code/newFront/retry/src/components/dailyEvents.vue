@@ -1,15 +1,20 @@
 <template>
     <div>
         <!--        <div v-for="event in dailyEvents" :key="event.Title">-->
-        <cell v-on:click="show = true" title="显示每日事务" is-link arrow-direction="down" style="background-color: aquamarine"></cell>
+        <cell v-on:click="show = true" title="显示每日事务" is-link arrow-direction="down"
+              style="background-color: aquamarine"></cell>
         <Overlay :show="show" v-on:click="show = false">
-            <van-row>
-                <div v-for="event in dailyEvents" :key="event.Title">
-                    <cell-group>
-                        <cell :title="event.Title" :value="event.Extra"/>
-                    </cell-group>
+
+            <div class="wrapper">
+                <div class="block">
+                    <div v-for="event in dailyEvents" :key="event.Title">
+                        <cell-group>
+                            <cell :title="event.Title" :value="event.Extra"/>
+                        </cell-group>
+                    </div>
                 </div>
-            </van-row>
+            </div>
+
         </Overlay>
         <!--        </div>-->
     </div>
@@ -52,5 +57,17 @@
 </script>
 
 <style scoped>
+    .wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
 
+
+    .block {
+        width: 500px;
+        height: 500px;
+        background-color: #fff;
+    }
 </style>
