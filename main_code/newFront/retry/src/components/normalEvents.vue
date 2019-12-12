@@ -4,25 +4,54 @@
             <!--            <SwipeCell :title="affair.Title" :desc="affair.Extra" status="" @click="showPopup">-->
             <swipe-cell>
                 <template slot="left">
-                    <Button square type="primary" text="日期" v-on:click="showPopup"/>
+                    <Button square type="primary" text="日期" v-on:click="showPopup(affair.CreatedAt,affair.Deadline)"/>
                 </template>
 
                 <cell :border="false" :title="affair.Title" :value="affair.Extra"/>
 
                 <template slot="right">
                     <Button square type="danger" text="删除" v-on:click="deleteAffairs(affair.ID)"/>
-                    <Button square type="primary" text="修改"/>
+                    <Button square type="primary" text="修改" v-on:click="modifyAffairs(affair.ID)"/>
                 </template>
 
             </swipe-cell>
-            <popup v-model="show" position="top" :style="{height:'20%'}">
-                <CellGroup>
-                    <Cell>创建于:{{affair.CreatedAt}}</Cell>
-                    <Cell>Deadline:{{affair.Deadline}}</Cell>
-                </CellGroup>
-            </popup>
         </div>
 
+
+        <popup v-model="show" position="top">
+            <CellGroup>
+                <cell>创建于:{{this.creatTime}}</cell>
+                <Cell>Deadline:{{this.Deadline_}}</Cell>
+            </CellGroup>
+        </popup>
+
+        <Overlay :show="show2">
+            <div class="wrapper">
+                <div class="block">
+                    <div>
+                        <CellGroup>
+                            <van-field
+                                    v-model="Title"
+                                    required
+                                    clearable
+                                    label="事务"
+                                    placeholder="Title"
+                            />
+
+                            <van-field
+                                    v-model="Extra"
+                                    label="附加"
+                                    placeholder="Extra"
+                            />
+                            <van-datetime-picker v-model="tempTime"
+                                                 :max-date="maxDate"
+                                                 v-on:cancel="show2=false"
+                                                 v-on:confirm="pushModifyAffair"/>
+                        </CellGroup>
+                    </div>
+                </div>
+            </div>
+        </Overlay>
         <Button plain type="info" v-on:click="show1=true">
             添加事务
         </Button>
@@ -45,7 +74,7 @@
                                     placeholder="Extra"
                             />
                             <van-datetime-picker
-                                    v-model="Deadline"
+                                    v-model="tempTime"
                                     :min-date="minDate"
                                     :max-date="maxDate"
                                     v-on:cancel="show1=false"
@@ -75,21 +104,29 @@
             let Title;
             let Extra;
             let ID_;
+            let creatTime;
+            let Deadline_;
             return {
                 show: false,
                 show1: false,
+                show2: false,
                 affairs: [],
+                creatTime,
+                Deadline_,
                 Title,
                 Extra,
-                Deadline: new Date(),
+                tempTime: new Date(),
                 minDate: new Date(),
                 maxDate: new Date(2020, 11, 31),
                 ID_,
             }
         },
         methods: {
-            showPopup() {
+            showPopup: function (creatTime,deadline) {
                 this.show = true;
+                this.creatTime=creatTime;
+                this.Deadline_=deadline;
+
             },
             deleteAffairs: function (ID) {
                 // alert(ID);
@@ -102,43 +139,47 @@
             modifyAffairs: function (ID) {
                 //回调
                 // alert(ID);
+                this.show2 = true;
                 this.ID_ = ID;
                 let i;
                 i = 0;
-                while (i < 100) {
+                while (i < 1000) {
                     // alert(this.affairs[i].ID);
                     if (this.affairs[i].ID == ID) {
-                        this.Deadline = this.affairs[i].Deadline;
+                        // this.tempTime = this.affairs[i].Deadline;
                         this.Title = this.affairs[i].Title;
                         this.Extra = this.affairs[i].Extra;
                         break;
                     }
                     i++;
                 }
+                // this.pushModifyAffair();
                 // this.getAllAffairs();
             },
             getAllAffairs: function () {
                 axios.get('http://121.199.40.243:1221/allAffairs').then(res => {
                     // axios.get('http://localhost:1221/allAffairs').then(res => {
+
+                    // eslint-disable-next-line no-console
+                    console.log(res)
                     this.affairs = res.data.data
+                    // eslint-disable-next-line no-console
+                    console.log(this.affairs)
                     // console.log(this.affairs)
-                }).catch(err => {
-                    this.$Message.error(err)
                 })
+                // .catch(err => {
+                // this.$Message.error(err)
+                // })
             },
             pushModifyAffair: function () {
-                let str, temp;
-                temp = this.Deadline + "";
-                str = temp.split(" ");
-                temp = str[0] + "T" + str[1] + "Z";
-
+                this.show2 = false;
                 axios({
                     method: 'put',
                     url: 'http://121.199.40.243:1221/opera/' + this.ID_,
                     // url: 'http://localhost:1221/opera/' + this.ID_,
                     data: {
                         Title: this.Title,
-                        Deadline: temp,
+                        // Deadline: this.tempTime,
                         Extra: this.Extra
                     }
                 }).then(() => {
@@ -151,7 +192,7 @@
                     url: 'http://121.199.40.243:1221/opera/add',
                     data: {
                         Title: this.Title,
-                        Deadline: this.Deadline,
+                        // Deadline: this.tempTime,
                         Extra: this.Extra,
                     }
                 }).then(() => {

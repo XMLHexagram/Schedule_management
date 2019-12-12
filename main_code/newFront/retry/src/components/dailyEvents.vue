@@ -46,7 +46,9 @@
                     // eslint-disable-next-line no-console
                     // console.log(this.dailyEvents)
                 }).catch(err => {
-                    this.$Message.error(err)
+                    // eslint-disable-next-line no-console
+                    console.log(err);
+                    alert("我们遇到了未知错误，这有可能导致程序无法正常运行");
                 })
             },
         },
@@ -67,7 +69,6 @@
 
     .block {
         width: 500px;
-        height: 500px;
         background-color: #fff;
     }
 </style>
