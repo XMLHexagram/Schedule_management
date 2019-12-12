@@ -1,5 +1,6 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from 'vue';
+import App from './App.vue';
+import '@vant/touch-emulator';
 import {Row,Col,Field,DatetimePicker} from "vant";
 
 Vue.config.productionTip = false
