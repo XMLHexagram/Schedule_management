@@ -18,14 +18,14 @@
         </div>
 
 
-        <popup v-model="show" position="top">
+        <popup v-model="showEventTime" position="top">
             <CellGroup>
-                <cell>创建于:{{this.creatTime}}</cell>
-                <Cell>Deadline:{{this.Deadline_}}</Cell>
+                <cell>创建于:{{this.tempCreatTime}}</cell>
+                <Cell>Deadline:{{this.tempDeadline}}</Cell>
             </CellGroup>
         </popup>
 
-        <Overlay :show="show2">
+        <Overlay :show="showModify">
             <div class="wrapper">
                 <div class="block">
                     <div>
@@ -45,17 +45,17 @@
                             />
                             <van-datetime-picker v-model="tempTime"
                                                  :max-date="maxDate"
-                                                 v-on:cancel="show2=false"
+                                                 v-on:cancel="cancelModifyEvent"
                                                  v-on:confirm="pushModifyAffair"/>
                         </CellGroup>
                     </div>
                 </div>
             </div>
         </Overlay>
-        <Button plain type="info" v-on:click="show1=true">
+        <Button plain type="info" v-on:click="showAddEvent=true">
             添加事务
         </Button>
-        <Overlay :show="show1">
+        <Overlay :show="showAddEvent">
             <div class="wrapper">
                 <div class="block">
                     <div>
@@ -77,7 +77,7 @@
                                     v-model="tempTime"
                                     :min-date="minDate"
                                     :max-date="maxDate"
-                                    v-on:cancel="show1=false"
+                                    v-on:cancel="showAddEvent=false"
                                     v-on:confirm="addEvents"/>
                         </CellGroup>
                     </div>
@@ -103,29 +103,29 @@
         data() {
             let Title;
             let Extra;
-            let ID_;
-            let creatTime;
-            let Deadline_;
+            let tempID;
+            let tempCreatTime;
+            let tempDeadline;
             return {
-                show: false,
-                show1: false,
-                show2: false,
+                showEventTime: false,
+                showAddEvent: false,
+                showModify: false,
                 affairs: [],
-                creatTime,
-                Deadline_,
+                tempCreatTime,
+                tempDeadline,
                 Title,
                 Extra,
                 tempTime: new Date(),
                 minDate: new Date(),
                 maxDate: new Date(2020, 11, 31),
-                ID_,
+                tempID,
             }
         },
         methods: {
-            showPopup: function (creatTime,deadline) {
-                this.show = true;
-                this.creatTime=creatTime;
-                this.Deadline_=deadline;
+            showPopup: function (creatTime, deadline) {
+                this.showEventTime = true;
+                this.tempCreatTime = creatTime;
+                this.tempDeadline = deadline;
 
             },
             deleteAffairs: function (ID) {
@@ -139,20 +139,23 @@
             modifyAffairs: function (ID) {
                 //回调
                 // alert(ID);
-                this.show2 = true;
-                this.ID_ = ID;
+                this.tempID = ID;
                 let i;
                 i = 0;
                 while (i < 1000) {
                     // alert(this.affairs[i].ID);
                     if (this.affairs[i].ID == ID) {
-                        // this.tempTime = this.affairs[i].Deadline;
+                        let tempToChange = this.affairs[i].Deadline;
+                        let tempData = new Date(tempToChange);
+                        this.tempTime = tempData;
+                        // alert(this.tempTime);
                         this.Title = this.affairs[i].Title;
                         this.Extra = this.affairs[i].Extra;
                         break;
                     }
                     i++;
                 }
+                this.showModify = true;
                 // this.pushModifyAffair();
                 // this.getAllAffairs();
             },
@@ -172,18 +175,20 @@
                 // })
             },
             pushModifyAffair: function () {
-                this.show2 = false;
+                this.showModify = false;
                 axios({
                     method: 'put',
-                    url: 'http://121.199.40.243:1221/opera/' + this.ID_,
+                    url: 'http://121.199.40.243:1221/opera/' + this.tempID,
                     // url: 'http://localhost:1221/opera/' + this.ID_,
                     data: {
                         Title: this.Title,
-                        // Deadline: this.tempTime,
+                        Deadline: this.tempTime,
                         Extra: this.Extra
                     }
                 }).then(() => {
-                    this.getAllAffairs()
+                    this.getAllAffairs();
+                    this.Title="";
+                    this.Extra="";
                 })
             },
             addEvents: function () {
@@ -192,14 +197,19 @@
                     url: 'http://121.199.40.243:1221/opera/add',
                     data: {
                         Title: this.Title,
-                        // Deadline: this.tempTime,
+                        Deadline: this.tempTime,
                         Extra: this.Extra,
                     }
                 }).then(() => {
                     this.getAllAffairs();
-                    this.show1 = false;
+                    this.showAddEvent = false;
                 })
             },
+            cancelModifyEvent: function () {
+                this.showModify=false;
+                this.Title="";
+                this.Extra="";
+            }
         },
         mounted() {
             this.getAllAffairs();
