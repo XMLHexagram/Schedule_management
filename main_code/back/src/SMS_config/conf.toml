@@ -1,6 +1,5 @@
 [DB]
 Address = "localhost"
-#Address = "121.199.40.243"
 User = "YuanCheng_user"
 Password  = "_Hexagram_user"
 DBName = "test_python"

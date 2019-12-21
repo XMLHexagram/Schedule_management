@@ -2,9 +2,7 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 	"strconv"
 	"time"
 )
@@ -29,7 +27,7 @@ func (s *Service) addAffair(c *gin.Context) {
 	err := c.BindJSON(temp)
 	//DealError(err)
 	if err != nil {
-		c.JSON(makeErrorReturn(400, 40000, "Bad Request"))
+		c.JSON(makeErrorReturn(400, 40000, "Wrong Format Of JSON"))//
 		return
 	}
 
@@ -40,7 +38,7 @@ func (s *Service) addAffair(c *gin.Context) {
 		Extra:    temp.Extra,
 	}).RowsAffected != 1 {
 		tx.Rollback()
-		c.JSON(makeErrorReturn(500, 50000, "can't add it"))
+		c.JSON(makeErrorReturn(500, 50000, "Can't Insert Into Database"))
 		return
 	}
 	tx.Commit()
@@ -51,26 +49,26 @@ func (s *Service) addAffair(c *gin.Context) {
 func (s *Service) deleteAffair(c *gin.Context) {
 	tempID := c.Query("id")
 	if tempID=="" {
-		c.JSON(makeErrorReturn(400,40000,"Bad Request"))
+		c.JSON(makeErrorReturn(404,40400,"Unable To Parse Parameters"))
 		return
 	}
 	id,err := strconv.ParseUint(tempID,10,32)
 	if err != nil {
-		c.JSON(makeErrorReturn(400,40000,"Bad Request"))
+		c.JSON(makeErrorReturn(404,40400,"Unable To Parse Parameters"))
 		return
 	}
 
 	temp := new(affair)
-	s.DB.Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
+	s.DB.Where("id = ?",id).Find(temp)
 	if temp.Title == "" {
-		c.JSON(makeErrorReturn(400, 40010, "affair doesn't exist"))
+		c.JSON(makeErrorReturn(404, 40410, "Not Found"))
 		return
 	}
 
 	tx := s.DB.Begin()
-	if tx.Where(&affair{Model: gorm.Model{ID: id}}).Delete(&affair{}).RowsAffected != 1 {
+	if tx.Where("id = ?",id).Delete(&affair{}).RowsAffected != 1 {
 		tx.Rollback()
-		c.JSON(makeErrorReturn(500, 50000, "can't delete it"))
+		c.JSON(makeErrorReturn(500, 50000, "Can't Insert Into Database"))
 		return
 	}
 	tx.Commit()
@@ -81,54 +79,54 @@ func (s *Service) deleteAffair(c *gin.Context) {
 func (s *Service) modifyAffair(c *gin.Context) {
 	tempID := c.Query("id")
 	if tempID=="" {
-		c.JSON(makeErrorReturn(400,40000,"Bad Request"))
+		c.JSON(makeErrorReturn(404,40400,"Unable To Parse Parameters"))
 		return
 	}
 	id,err := strconv.ParseUint(tempID,10,32)
 	if err != nil {
-		c.JSON(makeErrorReturn(400,40000,"Bad Request"))
+		c.JSON(makeErrorReturn(404,40400,"Unable To Parse Parameters"))
 		return
 	}
 
 	temp := new(affair)
-	s.DB.Model(&affair{}).Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
+	s.DB.Where("id = ?",id).Find(temp)
 	//s.DB.Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
 	if temp.Title == "" {
-		c.JSON(makeErrorReturn(400, 40000, "affair doesn't exist"))
+		c.JSON(makeErrorReturn(404, 40410, "Not Found"))
 		return
 	}
 
 	err = c.BindJSON(temp)
 	if err != nil {
-		fmt.Println(err)
-		c.JSON(makeErrorReturn(400, 40000, "wrong format"))
+		//fmt.Println(err)
+		c.JSON(makeErrorReturn(400, 40000, "Wrong Format Of JSON"))//
 		return
 	}
 	tx := s.DB.Begin()
-	if tx.Model(&affair{}).Where(&affair{Model: gorm.Model{ID: id}}).Updates(affair{
+	if tx.Model(&affair{}).Where("id = ?",id).Updates(&affair{
 	//if tx.Where(&affair{Model: gorm.Model{ID: id}}).Updates(affair{
 		Title:    temp.Title,
 		Deadline: temp.Deadline,
 		Extra:    temp.Extra,
 	}).RowsAffected != 1 {
 		tx.Rollback()
-		c.JSON(makeErrorReturn(500, 50000, "can't update it"))
+		c.JSON(makeErrorReturn(500, 50000, "Can't Insert Into Database"))
 		return
 	}
 	tx.Commit()
-	c.JSON(makeSuccessReturn(200, 20000))
+	c.JSON(makeSuccessReturn(200, ""))
 	return
 }
 
 func (s *Service) findAffair(c *gin.Context) {
 	tempID := c.Query("id")
 	if tempID=="" {
-		c.JSON(makeErrorReturn(400,40000,"Bad Request"))
+		c.JSON(makeErrorReturn(404,40400,"Unable To Parse Parameters"))
 		return
 	}
 	id,err := strconv.ParseUint(tempID,10,32)
 	if err != nil {
-		c.JSON(makeErrorReturn(400,40000,"Bad Request"))
+		c.JSON(makeErrorReturn(404,40400,"Unable To Parse Parameters"))
 		return
 	}
 
@@ -136,7 +134,7 @@ func (s *Service) findAffair(c *gin.Context) {
 	//s.DB.Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
 	s.DB.Where("ID = ?",id).Find(temp)
 	if temp.Title == "" {
-		c.JSON(makeErrorReturn(400, 40010, "affair not exist"))
+		c.JSON(makeErrorReturn(404, 40410, "Not Found"))
 		return
 	}
 

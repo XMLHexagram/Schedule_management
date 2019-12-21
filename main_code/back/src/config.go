@@ -2,7 +2,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/BurntSushi/toml"
 )
 
@@ -30,7 +29,7 @@ func (s *Service) ConfigInit() {
 
 	_, err := toml.DecodeFile(confPath, &s.Config)
 	DealError(err)
-	fmt.Println(s.Config)
+	//fmt.Println(s.Config)
 
 	//s.Config = *c
 }

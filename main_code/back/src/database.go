@@ -32,6 +32,7 @@ func (s *Service) DBInit()  {
 	fmt.Println("success connect to database")
 
 	db.AutoMigrate(&affair{})
+	db.AutoMigrate(&dailyEvent{})
 	s.DB = db
 	//fmt.Println(s.DB)
 }

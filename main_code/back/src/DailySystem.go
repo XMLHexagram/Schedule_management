@@ -1,8 +1,8 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
-	"strconv"
 )
 
 type dailyInput struct {
@@ -21,38 +21,81 @@ func (s *Service) addDailyEvents(c *gin.Context) {
 	temp := new(dailyInput)
 	err := c.BindJSON(temp)
 	if err != nil {
-		c.JSON(makeErrorReturn(400, 40000, "Bad Request"))
+		c.JSON(makeErrorReturn(400, 40000, "Wrong Format Of JSON"))//
 		return
 	}
 
 	tx := s.DB.Begin()
-	if tx.Create(dailyEvent{
-		Title: "",
-		Extra: "",
+	if tx.Create(&dailyEvent{
+		Title: temp.Title,
+		Extra: temp.Extra,
 	}).RowsAffected != 1 {
 		tx.Rollback()
-		c.JSON(makeErrorReturn(500,50000,"Internal Server Error"))
+		c.JSON(makeErrorReturn(500, 50000, "Can't Insert Into Database"))
 		return
 	}
 	tx.Commit()
-	c.JSON(makeSuccessReturn(200,""))
+	c.JSON(makeSuccessReturn(200, ""))
 	return
 }
 
 func (s *Service) deleteDailyEvents(c *gin.Context) {
-	tempID := c.Query("id")
-	if tempID == "" {
-		c.JSON(makeErrorReturn(400,40000,"Bad Request"))
+	id := c.Query("id")
+	if id == "" {
+		c.JSON(makeErrorReturn(404, 40400, "Unable To Parse Parameters"))
 		return
 	}
-	id,err := strconv.ParseUint(tempID,10,32)
-	if err != nil {
-		c.JSON(makeErrorReturn(400,40000,"Bad Request"))
+	temp := new(dailyEvent)
+
+	s.DB.Where("id = ?", id).Find(temp)
+	if temp.Title == "" {
+		c.JSON(makeErrorReturn(404, 40410, "Not Found"))
 		return
 	}
 
-	
+	tx := s.DB.Begin()
+	if tx.Where("id = ?", id).Delete(&dailyEvent{}).RowsAffected != 1 {
+		tx.Rollback()
+		c.JSON(makeErrorReturn(500, 50000, "Can't Insert Into Database"))
+		return
+	}
+	tx.Commit()
+	c.JSON(makeSuccessReturn(200, ""))
+	return
 }
 
 func (s *Service) modifyDailyEvents(c *gin.Context) {
+	id := c.Query("id")
+	if id == "" {
+		c.JSON(makeErrorReturn(404, 40400, "Unable To Parse Parameters"))
+		return
+	}
+
+	temp := new(dailyEvent)
+	s.DB.Where("id = ?", id).Find(temp)
+	//s.DB.Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
+	if temp.Title == "" {
+		c.JSON(makeErrorReturn(404, 40410, "Not Found"))
+		return
+	}
+
+	err := c.BindJSON(temp)
+	//fmt.Println(temp)
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(makeErrorReturn(400, 40000, "Wrong Format Of JSON"))//
+		return
+	}
+	tx := s.DB.Begin()
+	if tx.Model(&dailyEvent{}).Where("id = ?", id).Updates(&dailyEvent{
+		Title: temp.Title,
+		Extra: temp.Extra,
+	}).RowsAffected != 1 {
+		tx.Rollback()
+		c.JSON(makeErrorReturn(500, 50000, "Can't Insert Into Database"))
+		return
+	}
+	tx.Commit()
+	c.JSON(makeSuccessReturn(200, 20000))
+	return
 }
