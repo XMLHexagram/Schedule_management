@@ -107,4 +107,10 @@ venv.bak/
 .vscode/
 .idea/
 main_code/back/src/go_build_main_go.exe
+<<<<<<< HEAD
+=======
+导论课作业/introduce.md
+>>>>>>> dev3.3
 导论课作业/
+main_code/back/bin/go_build_main.exe
+main_code/back/bin/go_build_main_go.exe

@@ -1,0 +1,9 @@
+[DB]
+Address = "localhost"
+User = "YuanCheng_user"
+Password  = "_Hexagram_user"
+DBName = "test_python"
+#DBName = "go_test"
+
+[Web]
+Port = ":1221"
