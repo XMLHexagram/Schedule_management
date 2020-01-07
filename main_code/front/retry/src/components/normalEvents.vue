@@ -4,10 +4,10 @@
             <!--            <SwipeCell :title="affair.Title" :desc="affair.Extra" status="" @click="showPopup">-->
             <swipe-cell>
                 <template slot="left">
-                    <Button square type="primary" text="日期" v-on:click="showPopup(affair.CreatedAt,affair.Deadline)"/>
+                    <Button square type="primary" text="日期" v-on:click="showPopup(affair.created_at,affair.deadline)"/>
                 </template>
 
-                <cell :border="false" :title="affair.Title" :value="affair.Extra"/>
+                <cell :border="false" :title="affair.title" :value="affair.extra"/>
 
                 <template slot="right">
                     <Button square type="danger" text="删除" v-on:click="deleteAffairs(affair.ID)"/>
@@ -160,7 +160,7 @@
                 // this.getAllAffairs();
             },
             getAllAffairs: function () {
-                axios.get('http://121.199.40.243:1221/allAffairs').then(res => {
+                axios.get('http://121.199.40.243:1221/all/affairs').then(res => {
                     // axios.get('http://localhost:1221/allAffairs').then(res => {
 
                     // eslint-disable-next-line no-console

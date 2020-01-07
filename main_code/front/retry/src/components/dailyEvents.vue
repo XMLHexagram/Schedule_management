@@ -38,7 +38,7 @@
         },
         methods: {
             getDailyEvents: function () {
-                axios.get('http://121.199.40.243:1221/dailyEvents').then(res => {
+                axios.get('http://121.199.40.243:1221/all/dailyEvents').then(res => {
                     // axios.get('http://localhost:1221/dailyEvents').then(res => {
                     // alert(res)
                     // alert("1")
