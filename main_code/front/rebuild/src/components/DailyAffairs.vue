@@ -18,7 +18,7 @@
     // import {apiGet} from "../api";
 
     export default {
-        name: 'HelloWorld',
+        name: 'DailyAffairs',
         props: {
             // msg: String
         },
