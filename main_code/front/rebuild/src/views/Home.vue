@@ -1,6 +1,6 @@
 <template>
     <div>
-        <van-tabs v-model="active" animated swipeable>
+        <van-tabs v-model="active" swipeable>
             <van-tab title="每日任务">
                 <slot>
                     <DailyAffairs/>
