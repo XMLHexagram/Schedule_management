@@ -1,9 +1,10 @@
 <template>
     <div>
         <div v-for="affair in dailyAffairs" v-bind:key="affair.ID">
+
             <van-swipe-cell>
                 <template slot="left">
-                    <van-button square type="primary" text="选择"/>
+                    <van-button square type="primary" text="完成"/>
                 </template>
 
                 <van-cell :border="false" :title="affair.Title" :value="affair.Extra"/>
