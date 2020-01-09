@@ -11,6 +11,14 @@
 
             </van-swipe-cell>
         </div>
+
+        <van-row>
+            <van-col offset="15">
+                <van-button type="warning" v-on:click="showAdd">
+                    添加事务
+                </van-button>
+            </van-col>
+        </van-row>
     </div>
 </template>
 
@@ -39,6 +47,9 @@
                     this.dailyAffairs = err
                     alert("我们遇到了未知错误，这有可能导致程序无法正常运行");
                 })
+            },
+            showAdd:function () {
+
             }
         }
     }

@@ -13,10 +13,21 @@
 
             <!--            <van-popup v-model="showDetail" position="bottom" :style="{height:'20%'}">内容</van-popup>-->
         </div>
+
+        <!--        以下是以后要抽象成components的部分-->
+        <van-row>
+            <van-col offset="15">
+                <van-button type="warning" v-on:click="showAddAffair">
+                    添加事务
+                </van-button>
+            </van-col>
+        </van-row>
+
+        <!--        以下是用于展示的弹出层中的内容-->
         <van-popup
                 v-model="showDetail"
                 position="top"
-                :style="{ height: '50%' }"
+                :style="{ height: '55%' }"
         >
             <div>
                 <van-field
@@ -59,21 +70,20 @@
                         </van-button>
                     </van-col>
                 </van-row>
-
-
             </div>
         </van-popup>
 
+        <!--以下是用于修改的弹出层-->
         <transition name="van-fade">
             <van-popup
                     v-show="showModify"
                     v-model="showModify"
                     position="top"
-                    :style="{ height: '50%' }"
+                    :style="{ height: '55%' }"
                     :duration="0"
             >
                 <div>
-                    <form @submit="modifyAffair(tempAffair.id)">
+                    <form>
                         <van-field
                                 v-model="tempAffair.title"
                                 label="事务"
@@ -107,8 +117,13 @@
                         />
 
                         <van-row>
-                            <van-col offset="16">
-                                <van-button plain type="info submit">
+                            <van-col span="6" offset="3">
+                                <van-button plain type="info" v-on:click="showModify=false">
+                                    返回
+                                </van-button>
+                            </van-col>
+                            <van-col span="6" offset="7">
+                                <van-button plain type="primary submit" v-on:click="modifyAffair(tempAffair.id)">
                                     提交
                                 </van-button>
                             </van-col>
@@ -119,6 +134,60 @@
             </van-popup>
         </transition>
 
+<!--添加新事物的弹出层-->
+        <transition name="van-fade">
+            <van-popup
+                    v-show="showAdd"
+                    v-model="showAdd"
+                    position="top"
+                    :style="{ height: '55%' }"
+                    :duration="0"
+            >
+                <div>
+                    <form>
+                        <van-field
+                                v-model="tempAffair.title"
+                                label="事务"
+                                rows="2"
+                                autosize
+                                type="textarea"
+                        />
+                        <van-field
+                                v-model="tempAffair.extra"
+                                label="详细说明"
+                                rows="2"
+                                autosize
+                                type="textarea"
+                        />
+                        <van-field
+                                v-model="tempAffair.deadline"
+                                label="截止时间"
+                                rows="2"
+                                autosize
+                                disabled
+                                type="textarea"
+                                v-on:click="showTimePacker=true"
+                        />
+
+                        <van-row>
+                            <van-col span="6" offset="3">
+                                <van-button plain type="info" v-on:click="showAdd=false">
+                                    返回
+                                </van-button>
+                            </van-col>
+                            <van-col span="6" offset="7">
+                                <van-button plain type="primary submit" v-on:click="addAffair(tempAffair.id)">
+                                    提交
+                                </van-button>
+                            </van-col>
+                        </van-row>
+                    </form>
+
+                </div>
+            </van-popup>
+        </transition>
+
+<!--        时间输入控件-->
         <van-popup
                 v-model="showTimePacker"
                 position="bottom"
@@ -152,6 +221,7 @@
                 showDetail: false,
                 showModify: false,
                 showTimePacker: false,
+                showAdd:false,
                 tempAffair: {},
                 minDate: new Date(),
                 maxDate: new Date(2023, 0, 1),
@@ -181,22 +251,42 @@
                     this.getAffairs()
                 })
             },
-            modifyAffair:function(id){
+            modifyAffair: function (id) {
                 this.showModify = false;
                 axios({
                         method: 'put',
                         url: 'http://www.sweetbeecr.com:1221/opera?id=' + id,
                         data: {
-                            "title":this.tempAffair.title,
-                            "deadline":this.currentDate,
+                            "title": this.tempAffair.title,
+                            "deadline": this.currentDate,
                             //这里如果传入this.tempAffair.deadline会返回json格式错误
                             //可能因为这个格式无法被解析成时间
-                            "extra":this.tempAffair.extra
+                            "extra": this.tempAffair.extra
                         }
                     }
                 ).then(() => {
                     this.getAffairs();
                 })
+            },
+            addAffair: function () {
+                this.showAdd = false;
+                axios({
+                    method: 'post',
+                    url: 'http://www.sweetbeecr.com:1221/opera/add',
+                    data: {
+                        "title": this.tempAffair.title,
+                        "extra": this.tempAffair.extra,
+                        "deadline": this.currentDate,
+                    }
+                }).then(() => {
+                    this.getAffairs();
+                })
+            },
+            showAddAffair: function () {
+                for (let key in this.tempAffair) {
+                    delete this.tempAffair[key];
+                }
+                this.showAdd = true;
             },
             changeDeadline: function () {
                 let y = this.currentDate.getFullYear();
