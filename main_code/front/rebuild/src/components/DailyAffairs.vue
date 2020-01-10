@@ -117,11 +117,11 @@
             }
         },
         created() {
-            this.getDailyEvents()
+            this.getDailyAffairs()
         },
         methods: {
-            getDailyEvents: function () {
-                axios.get(baseURL + "/all/dailyEvents").then((res) => {
+            getDailyAffairs: function () {
+                axios.get(baseURL + "/all/dailyAffairs").then((res) => {
                     this.dailyAffairs = res.data.data
                 }).catch(err => {
                     this.dailyAffairs = err
@@ -143,7 +143,7 @@
             },
             deleteDailyAffair: function (id) {
                 axios.delete(baseURL + "/operaDaily?id=" + id).then(() => {
-                    this.getDailyEvents()
+                    this.getDailyAffairs()
                 }).catch(err => {
                     this.dailyAffairs = err
                     alert("我们遇到了未知错误，这有可能导致程序无法正常运行");
@@ -174,7 +174,7 @@
                         "deadline": this.currentDate,
                     }
                 }).then(() => {
-                    this.getDailyEvents();
+                    this.getDailyAffairs();
                 })
             },
         }
