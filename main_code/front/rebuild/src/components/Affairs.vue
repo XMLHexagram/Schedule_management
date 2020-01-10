@@ -17,7 +17,7 @@
         <!--        以下是以后要抽象成components的部分-->
         <van-row>
             <van-col offset="15">
-                <van-button type="warning" v-on:click="showAddAffair">
+                <van-button type="info" v-on:click="showAddAffair">
                     添加事务
                 </van-button>
             </van-col>
@@ -123,7 +123,7 @@
                                 </van-button>
                             </van-col>
                             <van-col span="6" offset="7">
-                                <van-button plain type="primary submit" v-on:click="modifyAffair(tempAffair.id)">
+                                <van-button plain type="primary" v-on:click="modifyAffair(tempAffair.id)">
                                     提交
                                 </van-button>
                             </van-col>
@@ -135,13 +135,10 @@
         </transition>
 
 <!--添加新事物的弹出层-->
-        <transition name="van-fade">
             <van-popup
-                    v-show="showAdd"
                     v-model="showAdd"
                     position="top"
                     :style="{ height: '55%' }"
-                    :duration="0"
             >
                 <div>
                     <form>
@@ -176,7 +173,7 @@
                                 </van-button>
                             </van-col>
                             <van-col span="6" offset="7">
-                                <van-button plain type="primary submit" v-on:click="addAffair(tempAffair.id)">
+                                <van-button plain type="primary" v-on:click="addAffair(tempAffair.id)">
                                     提交
                                 </van-button>
                             </van-col>
@@ -185,7 +182,6 @@
 
                 </div>
             </van-popup>
-        </transition>
 
 <!--        时间输入控件-->
         <van-popup
@@ -199,7 +195,7 @@
                     type="datetime"
                     :min-date="minDate"
                     :max-date="maxDate"
-                    v-on:change="changeDeadline"
+                    v-on:change="changeToDeadline"
             />
         </van-popup>
 
@@ -207,7 +203,9 @@
 </template>
 
 <script>
-    import axios from 'axios'
+    import axios from 'axios';
+    import {baseURL} from "../main";
+    import {Dialog} from "vant";
     // import {apiGet} from "../api";
 
     export default {
@@ -237,7 +235,7 @@
                 this.tempAffair = this.Affairs[index]
             },
             getAffairs: function () {
-                axios.get("http://www.sweetbeecr.com:1221/all/affairs").then((res) => {
+                axios.get(baseURL+"/all/affairs").then((res) => {
                     this.Affairs = res.data.data
                 }).catch(err => {
                     this.Affairs = err
@@ -245,17 +243,26 @@
                 })
             },
             deleteAffair: function (id) {
-                let url = 'http://www.sweetbeecr.com:1221/opera?id=' + id;
-                axios.delete(url).then(() => {
-                    // axios.delete('http://localhost:1221/opera/' + ID).then(() => {
-                    this.getAffairs()
-                })
+                Dialog.confirm({
+                    // title: '标题',
+                    message: '确定完成了吗'
+                }).then(() => {
+                    let url = baseURL + '/opera?id=' + id;
+                    axios.delete(url).then(() => {
+                        // axios.delete('http://localhost:1221/opera/' + ID).then(() => {
+                        this.getAffairs()
+                    })
+                }).catch(() => {
+                    // on cancel
+                });
+
+
             },
             modifyAffair: function (id) {
                 this.showModify = false;
                 axios({
                         method: 'put',
-                        url: 'http://www.sweetbeecr.com:1221/opera?id=' + id,
+                        url: baseURL+'/opera?id=' + id,
                         data: {
                             "title": this.tempAffair.title,
                             "deadline": this.currentDate,
@@ -272,7 +279,7 @@
                 this.showAdd = false;
                 axios({
                     method: 'post',
-                    url: 'http://www.sweetbeecr.com:1221/opera/add',
+                    url: baseURL+'/opera/add',
                     data: {
                         "title": this.tempAffair.title,
                         "extra": this.tempAffair.extra,
@@ -288,7 +295,7 @@
                 }
                 this.showAdd = true;
             },
-            changeDeadline: function () {
+            changeToDeadline: function () {
                 let y = this.currentDate.getFullYear();
                 let m = this.currentDate.getMonth() + 1;
                 m = m < 10 ? ('0' + m) : m;
@@ -301,7 +308,7 @@
                 second = minute < 10 ? ('0' + second) : second;
 
                 this.tempAffair.deadline = y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
-            }
+            },
         }
     }
 </script>

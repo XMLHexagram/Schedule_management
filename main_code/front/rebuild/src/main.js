@@ -4,7 +4,6 @@ import router from './router'
 import '@vant/touch-emulator';
 import { Tab, Tabs,SwipeCell, Cell, CellGroup,Button,Overlay,Icon,Sticky,Popup,Field,Row,Col,DatetimePicker } from 'vant';
 
-
 Vue.config.productionTip = false
 
 Vue.use(Tab).use(Tabs);
@@ -18,6 +17,10 @@ Vue.use(Popup);
 Vue.use(Field);
 Vue.use(Row).use(Col);
 Vue.use(DatetimePicker);
+
+const port=":1221";
+const URL="http://www.sweetbeecr.com";
+export const baseURL=URL+port;
 
 new Vue({
   router,
