@@ -15,7 +15,7 @@ func (s *Service) RouterInit() {
 	all := r.Group("/all")
 	{
 		all.GET("/affairs", s.getAllAffairs)
-		all.GET("/dailyEvents", s.getDailyEvents)
+		all.GET("/dailyAffairs", s.getDailyEvents)
 	}
 
 

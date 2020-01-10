@@ -35,7 +35,7 @@ Success(200)
 }
 ```
 
-##### GET `/all/dailyEvents` 获取所有每日任务
+##### GET `/all/dailyAffairs` 获取所有每日任务
 
 Success(200)
 ```json
