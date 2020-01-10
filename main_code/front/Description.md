@@ -12,6 +12,8 @@ const URL="http://www.sweetbeecr.com";  //改成后端服务所在的网络位�
 export const baseURL=URL+port;
 ```
 
+推荐使用`vue-cli`打开
+
 
 学艺不精,以后再完善
 现在的前端仅仅是能用
