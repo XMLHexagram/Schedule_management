@@ -19,7 +19,7 @@ Vue.use(Row).use(Col);
 Vue.use(DatetimePicker);
 
 const port=":1221";
-const URL="http://www.sweetbeecr.com";
+const URL="121.199.40.243";
 export const baseURL=URL+port;
 
 new Vue({

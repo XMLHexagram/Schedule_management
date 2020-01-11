@@ -1,8 +1,8 @@
 [DB]
-Address = "localhost"
-User = "YuanCheng_user"
-Password  = "_Hexagram_user"
-DBName = "test_python"
+Address = "121.199.40.243"
+User = "for_dala_Er3ASsd6s352d"
+Password  = "aS#d4wxg23d"
+DBName = "TEST_temp"
 #DBName = "go_test"
 
 [Web]

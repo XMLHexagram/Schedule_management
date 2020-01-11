@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :style="{ background: backGround }">
         <div v-for="affair in dailyAffairs" v-bind:key="affair.ID">
 
             <van-swipe-cell>
@@ -21,6 +21,11 @@
             <van-col span="6" offset="15">
                 <van-button type="info" v-on:click="showAdd">
                     添加任务
+                </van-button>
+            </van-col>
+            <van-col span="6" offset="15">
+                <van-button type="info" v-on:click="changeBackGround">
+                    更换背景
                 </van-button>
             </van-col>
         </van-row>
@@ -114,6 +119,7 @@
                 maxDate: new Date(2023, 0, 1),
                 currentDate: new Date(),
                 showTimePacker:false,
+                backGround: null
             }
         },
         created() {
@@ -163,8 +169,9 @@
 
                 this.tempAffair.deadline = y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
             },
-            addDailyAffair:function () {
-                this.showAddPopup = false;
+            addDailyAffair: function () {
+                try {
+                    this.showAddPopup = false;
                 axios({
                     method: 'post',
                     url: baseURL+'/operaDaily/add',
@@ -176,7 +183,21 @@
                 }).then(() => {
                     this.getDailyAffairs();
                 })
+                } catch (error) {
+                    alert("添加失败")
+                }
+                
             },
+            changeBackGround: function() {
+                axios.get("https://s0.xinger.ink/acgimg/acgurl.php").then((res) => {
+                    this.backGround = res
+                    console.log(111)
+                }).catch(err => {
+                    this.dailyAffairs = err
+                    alert("背景加载失败");
+                })
+                // this.backGround = this.backGround + "https://s0.xinger.ink/acgimg/acgurl.php"
+            }
         }
     }
 </script>
