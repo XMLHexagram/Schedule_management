@@ -1,99 +1,103 @@
 <template>
     <div :style="{ background: backGround }">
-        <div v-for="affair in dailyAffairs" v-bind:key="affair.ID">
+        <div style="padding-left: 10% , padding-right: 10%">
+            <div v-for="affair in dailyAffairs" v-bind:key="affair.ID">
 
-            <van-swipe-cell>
-                <template slot="left">
-                    <van-button square type="primary" text="删除" v-on:click="showCheck(affair.ID)"/>
-                </template>
+                <van-swipe-cell>
+                    <template slot="left">
+                        <van-button square type="primary" text="删除" v-on:click="showCheck(affair.ID)"/>
+                    </template>
 
-                <van-cell :border="false" :title="affair.Title" :value="affair.Extra"/>
+                    <van-cell :border="false" :title="affair.Title" :value="affair.Extra"/>
 
-            </van-swipe-cell>
-        </div>
-
-        <van-row>
-            <!--            <van-col span="6" offset="5">-->
-            <!--                <van-button type="warning">-->
-            <!--                    删除事务-->
-            <!--                </van-button>-->
-            <!--            </van-col>-->
-            <van-col span="6" offset="15">
-                <van-button type="info" v-on:click="showAdd">
-                    添加任务
-                </van-button>
-            </van-col>
-            <van-col span="6" offset="15">
-                <van-button type="info" v-on:click="changeBackGround">
-                    更换背景
-                </van-button>
-            </van-col>
-        </van-row>
-
-<!--        用于添加新事务的弹出层-->
-        <van-popup
-                v-model="showAddPopup"
-                position="top"
-                :style="{ height: '55%' }"
-        >
-            <div>
-                <form>
-                    <van-field
-                            v-model="tempAffair.title"
-                            label="每日任务"
-                            rows="2"
-                            autosize
-                            type="textarea"
-                    />
-                    <van-field
-                            v-model="tempAffair.extra"
-                            label="详细说明"
-                            rows="2"
-                            autosize
-                            type="textarea"
-                    />
-                    <van-field
-                            v-model="tempAffair.deadline"
-                            label="截止时间"
-                            rows="2"
-                            autosize
-                            disabled
-                            type="textarea"
-                            v-on:click="showTimePacker=true"
-                    />
-
-                    <van-row>
-                        <van-col span="6" offset="3">
-                            <van-button plain type="info" v-on:click="showAddPopup=false">
-                                返回
-                            </van-button>
-                        </van-col>
-                        <van-col span="6" offset="7">
-                            <van-button plain type="primary" v-on:click="addDailyAffair(tempAffair.id)">
-                                提交
-                            </van-button>
-                        </van-col>
-                    </van-row>
-                </form>
-
+                </van-swipe-cell>
             </div>
-        </van-popup>
 
-        <!--        时间输入控件-->
-        <van-popup
-                v-model="showTimePacker"
-                position="bottom"
-                :style="{ height: '30%' }"
-        >
-            <van-datetime-picker
-                    :show-toolbar="false"
-                    v-model="currentDate"
-                    type="datetime"
-                    :min-date="minDate"
-                    :max-date="maxDate"
-                    v-on:change="changeToDeadline"
-            />
-        </van-popup>
+            <van-row  style="display: flex; justify-content: center">
+                <!--            <van-col span="6" offset="5">-->
+                <!--                <van-button type="warning">-->
+                <!--                    删除事务-->
+                <!--                </van-button>-->
+                <!--            </van-col>-->
+                <!-- <van-col span="6" offset="15"> -->
+                    <van-button type="info" v-on:click="showAdd" style="margin: 10px">
+                        添加任务
+                    </van-button>
+                <!-- </van-col> -->
+                <!-- <van-col span="6" offset="15"> -->
+                    <van-button type="info" v-on:click="changeBackGround" style="margin: 10px" >
+                        更换背景
+                    </van-button>
+                <!-- </van-col> -->
+            </van-row>
+
+    <!--        用于添加新事务的弹出层-->
+            <van-popup
+                    v-model="showAddPopup"
+                    position="top"
+                    style="border-radius: 0 0 15px 15px"
+                    :style="{ height: '35%' }"
+            >
+                <div>
+                    <form>
+                        <van-field
+                                v-model="tempAffair.title"
+                                label="每日任务"
+                                rows="2"
+                                autosize
+                                type="textarea"
+                                
+                        />
+                        <van-field
+                                v-model="tempAffair.extra"
+                                label="详细说明"
+                                rows="2"
+                                autosize
+                                type="textarea"
+                        />
+                        <van-field
+                                v-model="tempAffair.deadline"
+                                label="截止时间"
+                                rows="2"
+                                autosize
+                                disabled
+                                type="textarea"
+                                v-on:click="showTimePacker=true"
+                        />
+
+                        <van-row>
+                            <van-col span="6" offset="3">
+                                <van-button plain type="info" v-on:click="showAddPopup=false">
+                                    返回
+                                </van-button>
+                            </van-col>
+                            <van-col span="6" offset="7">
+                                <van-button plain type="primary" v-on:click="addDailyAffair(tempAffair.id)">
+                                    提交
+                                </van-button>
+                            </van-col>
+                        </van-row>
+                    </form>
+
+                </div>
+            </van-popup>
+
+            <!--        时间输入控件-->
+            <van-popup
+                    v-model="showTimePacker"
+                    position="bottom"
+                    :style="{ height: '30%' }"
+            >
+                <van-datetime-picker
+                        :show-toolbar="false"
+                        v-model="currentDate"
+                        type="datetime"
+                        :min-date="minDate"
+                        :max-date="maxDate"
+                        v-on:change="changeToDeadline"
+                />
+            </van-popup>
+        </div>
     </div>
 
 
@@ -204,4 +208,10 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+    .input-text {
+        border: 1px;
+        padding: 30%;
+        background-color: #66ccff;
+        border-radius: 5px;
+    }
 </style>

@@ -15,13 +15,23 @@
         </div>
 
         <!--        以下是以后要抽象成components的部分-->
-        <van-row>
-            <van-col offset="15">
-                <van-button type="info" v-on:click="showAddAffair">
-                    添加事务
-                </van-button>
-            </van-col>
-        </van-row>
+        <van-row  style="display: flex; justify-content: center">
+                <!--            <van-col span="6" offset="5">-->
+                <!--                <van-button type="warning">-->
+                <!--                    删除事务-->
+                <!--                </van-button>-->
+                <!--            </van-col>-->
+                <!-- <van-col span="6" offset="15"> -->
+                    <van-button type="info" v-on:click="showAdd" style="margin: 10px">
+                        添加任务
+                    </van-button>
+                <!-- </van-col> -->
+                <!-- <van-col span="6" offset="15"> -->
+                    <van-button type="info" v-on:click="changeBackGround" style="margin: 10px" >
+                        更换背景
+                    </van-button>
+                <!-- </van-col> -->
+            </van-row>
 
         <!--        以下是用于展示的弹出层中的内容-->
         <van-popup
