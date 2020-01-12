@@ -2,14 +2,13 @@ package main
 
 import "github.com/gin-gonic/gin"
 
-func (s *Service) getDailyEvents(c *gin.Context) {
+func (s *Service) getDailyEvents(c *gin.Context) (int,interface{}){
 	data := make([]*dailyEvent,0)
 	s.DB.Find(&data)
-	c.JSON(makeSuccessReturn(200,data))
-	return
+	return makeSuccessReturn(200,data)
 }
 
-func (s *Service) getAllAffairs(c *gin.Context) {
+func (s *Service) getAllAffairs(c *gin.Context) (int,interface{}){
 	data := make([]*affair,0,100)
 	s.DB.Find(&data)
 	out := make([]*output,0,100)
@@ -23,6 +22,5 @@ func (s *Service) getAllAffairs(c *gin.Context) {
 		})
 	}
 	//fmt.Println(out)
-	c.JSON(makeSuccessReturn(200, out))
-	return
+	return makeSuccessReturn(200, out)
 }

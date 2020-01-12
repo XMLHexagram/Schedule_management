@@ -17,12 +17,12 @@ type dailyOutput struct {
 	CreatedAt string `json:"created_at"`
 }
 
-func (s *Service) addDailyEvents(c *gin.Context) {
+func (s *Service) addDailyEvents(c *gin.Context) (int, interface{}) {
 	temp := new(dailyInput)
 	err := c.BindJSON(temp)
 	if err != nil {
-		c.JSON(makeErrorReturn(400, 40000, "Wrong Format Of JSON"))//
-		return
+		return makeErrorReturn(400, 40000, "Wrong Format Of JSON")
+
 	}
 
 	tx := s.DB.Begin()
@@ -31,60 +31,53 @@ func (s *Service) addDailyEvents(c *gin.Context) {
 		Extra: temp.Extra,
 	}).RowsAffected != 1 {
 		tx.Rollback()
-		c.JSON(makeErrorReturn(500, 50000, "Can't Insert Into Database"))
-		return
+		return makeErrorReturn(500, 50000, "Can't Insert Into Database")
 	}
 	tx.Commit()
-	c.JSON(makeSuccessReturn(200, ""))
-	return
+	return makeSuccessReturn(200, "")
 }
 
-func (s *Service) deleteDailyEvents(c *gin.Context) {
+func (s *Service) deleteDailyEvents(c *gin.Context) (int, interface{}) {
 	id := c.Query("id")
 	if id == "" {
-		c.JSON(makeErrorReturn(404, 40400, "Unable To Parse Parameters"))
-		return
+		return makeErrorReturn(404, 40400, "Unable To Parse Parameters")
+
 	}
 	temp := new(dailyEvent)
 
 	s.DB.Where("id = ?", id).Find(temp)
 	if temp.Title == "" {
-		c.JSON(makeErrorReturn(404, 40410, "Not Found"))
-		return
+		return makeErrorReturn(404, 40410, "Not Found")
+
 	}
 
 	tx := s.DB.Begin()
 	if tx.Where("id = ?", id).Delete(&dailyEvent{}).RowsAffected != 1 {
 		tx.Rollback()
-		c.JSON(makeErrorReturn(500, 50000, "Can't Insert Into Database"))
-		return
+		return makeErrorReturn(500, 50000, "Can't Insert Into Database")
 	}
 	tx.Commit()
-	c.JSON(makeSuccessReturn(200, ""))
-	return
+	return makeSuccessReturn(200, "")
 }
 
-func (s *Service) modifyDailyEvents(c *gin.Context) {
+func (s *Service) modifyDailyEvents(c *gin.Context) (int, interface{}) {
 	id := c.Query("id")
 	if id == "" {
-		c.JSON(makeErrorReturn(404, 40400, "Unable To Parse Parameters"))
-		return
+		return makeErrorReturn(404, 40400, "Unable To Parse Parameters")
 	}
 
 	temp := new(dailyEvent)
 	s.DB.Where("id = ?", id).Find(temp)
 	//s.DB.Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
 	if temp.Title == "" {
-		c.JSON(makeErrorReturn(404, 40410, "Not Found"))
-		return
+		return makeErrorReturn(404, 40410, "Not Found")
 	}
 
 	err := c.BindJSON(temp)
 	//fmt.Println(temp)
 	if err != nil {
 		fmt.Println(err)
-		c.JSON(makeErrorReturn(400, 40000, "Wrong Format Of JSON"))//
-		return
+		return makeErrorReturn(400, 40000, "Wrong Format Of JSON") //
 	}
 	tx := s.DB.Begin()
 	if tx.Model(&dailyEvent{}).Where("id = ?", id).Updates(&dailyEvent{
@@ -92,10 +85,9 @@ func (s *Service) modifyDailyEvents(c *gin.Context) {
 		Extra: temp.Extra,
 	}).RowsAffected != 1 {
 		tx.Rollback()
-		c.JSON(makeErrorReturn(500, 50000, "Can't Insert Into Database"))
-		return
+		return makeErrorReturn(500, 50000, "Can't Insert Into Database")
+
 	}
 	tx.Commit()
-	c.JSON(makeSuccessReturn(200, 20000))
-	return
+	return makeSuccessReturn(200, 20000)
 }

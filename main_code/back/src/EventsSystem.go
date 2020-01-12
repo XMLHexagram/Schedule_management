@@ -22,13 +22,13 @@ type output struct {
 }
 
 
-func (s *Service) addAffair(c *gin.Context) {
+func (s *Service) addAffair(c *gin.Context) (int,interface{}){
 	temp := new(input)
 	err := c.BindJSON(temp)
 	//DealError(err)
 	if err != nil {
-		c.JSON(makeErrorReturn(400, 40000, "Wrong Format Of JSON"))//
-		return
+		return makeErrorReturn(400, 40000, "Wrong Format Of JSON")//
+
 	}
 
 	tx := s.DB.Begin()
@@ -38,69 +38,59 @@ func (s *Service) addAffair(c *gin.Context) {
 		Extra:    temp.Extra,
 	}).RowsAffected != 1 {
 		tx.Rollback()
-		c.JSON(makeErrorReturn(500, 50000, "Can't Insert Into Database"))
-		return
+		return makeErrorReturn(500, 50000, "Can't Insert Into Database")
 	}
 	tx.Commit()
-	c.JSON(makeSuccessReturn(200, ""))
-	return
+	return makeSuccessReturn(200, "")
+
 }
 
-func (s *Service) deleteAffair(c *gin.Context) {
+func (s *Service) deleteAffair(c *gin.Context) (int,interface{}){
 	tempID := c.Query("id")
 	if tempID=="" {
-		c.JSON(makeErrorReturn(404,40400,"Unable To Parse Parameters"))
-		return
+		return makeErrorReturn(404,40400,"Unable To Parse Parameters")
 	}
 	id,err := strconv.ParseUint(tempID,10,32)
 	if err != nil {
-		c.JSON(makeErrorReturn(404,40400,"Unable To Parse Parameters"))
-		return
+		return makeErrorReturn(404,40400,"Unable To Parse Parameters")
 	}
 
 	temp := new(affair)
 	s.DB.Where("id = ?",id).Find(temp)
 	if temp.Title == "" {
-		c.JSON(makeErrorReturn(404, 40410, "Not Found"))
-		return
+		return makeErrorReturn(404, 40410, "Not Found")
 	}
 
 	tx := s.DB.Begin()
 	if tx.Where("id = ?",id).Delete(&affair{}).RowsAffected != 1 {
 		tx.Rollback()
-		c.JSON(makeErrorReturn(500, 50000, "Can't Insert Into Database"))
-		return
+		return makeErrorReturn(500, 50000, "Can't Insert Into Database")
 	}
 	tx.Commit()
-	c.JSON(makeSuccessReturn(200, ""))
-	return
+	return makeSuccessReturn(200, "")
 }
 
-func (s *Service) modifyAffair(c *gin.Context) {
+func (s *Service) modifyAffair(c *gin.Context) (int,interface{}){
 	tempID := c.Query("id")
 	if tempID=="" {
-		c.JSON(makeErrorReturn(404,40400,"Unable To Parse Parameters"))
-		return
+		return makeErrorReturn(404,40400,"Unable To Parse Parameters")
 	}
 	id,err := strconv.ParseUint(tempID,10,32)
 	if err != nil {
-		c.JSON(makeErrorReturn(404,40400,"Unable To Parse Parameters"))
-		return
+		return makeErrorReturn(404,40400,"Unable To Parse Parameters")
 	}
 
 	temp := new(affair)
 	s.DB.Where("id = ?",id).Find(temp)
 	//s.DB.Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
 	if temp.Title == "" {
-		c.JSON(makeErrorReturn(404, 40410, "Not Found"))
-		return
+		return makeErrorReturn(404, 40410, "Not Found")
 	}
 
 	err = c.BindJSON(temp)
 	if err != nil {
 		//fmt.Println(err)
-		c.JSON(makeErrorReturn(400, 40000, "Wrong Format Of JSON"))//
-		return
+		return makeErrorReturn(400, 40000, "Wrong Format Of JSON") //
 	}
 	tx := s.DB.Begin()
 	if tx.Model(&affair{}).Where("id = ?",id).Updates(&affair{
@@ -110,50 +100,29 @@ func (s *Service) modifyAffair(c *gin.Context) {
 		Extra:    temp.Extra,
 	}).RowsAffected != 1 {
 		tx.Rollback()
-		c.JSON(makeErrorReturn(500, 50000, "Can't Insert Into Database"))
-		return
+		return makeErrorReturn(500, 50000, "Can't Insert Into Database")
 	}
 	tx.Commit()
-	c.JSON(makeSuccessReturn(200, ""))
-	return
+	return makeSuccessReturn(200, "")
 }
 
-func (s *Service) findAffair(c *gin.Context) {
+func (s *Service) findAffair(c *gin.Context) (int,interface{}){
 	tempID := c.Query("id")
 	if tempID=="" {
-		c.JSON(makeErrorReturn(404,40400,"Unable To Parse Parameters"))
-		return
+		return makeErrorReturn(404,40400,"Unable To Parse Parameters")
 	}
 	id,err := strconv.ParseUint(tempID,10,32)
 	if err != nil {
-		c.JSON(makeErrorReturn(404,40400,"Unable To Parse Parameters"))
-		return
+		return makeErrorReturn(404,40400,"Unable To Parse Parameters")
 	}
 
 	temp := new(affair)
 	//s.DB.Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
 	s.DB.Where("ID = ?",id).Find(temp)
 	if temp.Title == "" {
-		c.JSON(makeErrorReturn(404, 40410, "Not Found"))
-		return
+		return makeErrorReturn(404, 40410, "Not Found")
 	}
 
-	c.JSON(makeSuccessReturn(200, temp))
-	return
-}
-
-func makeSuccessReturn(status int, data interface{}) (int, interface{}) {
-	return status, gin.H{
-		"error": 0,
-		"msg":   "success",
-		"data":  data,
-	}
-}
-
-func makeErrorReturn(status int, error int, msg string) (int, interface{}) {
-	return status, gin.H{
-		"error": error,
-		"msg":   msg,
-	}
+	return makeSuccessReturn(200, temp)
 }
 
