@@ -8,6 +8,12 @@ import (
 	"time"
 )
 
+type User struct {
+	gorm.Model
+	Username string
+	Password string
+}
+
 type affair struct {
 	gorm.Model
 	Title    string
@@ -33,6 +39,7 @@ func (s *Service) DBInit()  {
 
 	db.AutoMigrate(&affair{})
 	db.AutoMigrate(&dailyEvent{})
+	db.AutoMigrate(&User{})
 	s.DB = db
 	//fmt.Println(s.DB)
 }

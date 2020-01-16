@@ -12,13 +12,21 @@ func (s *Service) RouterInit() {
 	r := gin.Default()
 	r.Use(cors.Default())
 
+	auth := r.Group("/auth")
+	{
+		auth.POST("/login",requestEntry(s.login))
+		auth.POST("/register",requestEntry(s.register))
+	}
+
 	all := r.Group("/all")
+	all.Use(JWT())
 	{
 		all.GET("/affairs", requestEntry(s.getAllAffairs))
 		all.GET("/dailyAffairs", requestEntry(s.getDailyEvents))
 	}
 
 	operaDaily := r.Group("/operaDaily")
+	operaDaily.Use(JWT())
 	{
 		operaDaily.POST("/add", requestEntry(s.addDailyEvents))
 		operaDaily.DELETE("", requestEntry(s.deleteDailyEvents))
@@ -27,6 +35,7 @@ func (s *Service) RouterInit() {
 	}
 
 	opera := r.Group("/opera")
+	opera.Use(JWT())
 	{
 		opera.POST("/add", requestEntry(s.addAffair))  //增
 		opera.DELETE("", requestEntry(s.deleteAffair)) //删
