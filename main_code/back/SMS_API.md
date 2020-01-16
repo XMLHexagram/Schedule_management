@@ -1,15 +1,78 @@
 # SMS_API
-###### Schedule Manage System
 
-约定:
+
+*Schedule Manage System*
+
+
+- [约定](#约定)
+- [前置条件](#前置条件)
+- [注册登陆](#注册登陆)
+- [总事务获取](#总事务获取)
+- [操作事务](#操作事务)
+- [操作每日任务](#操作每日任务)
+- [错误码对照表](#错误码对照表)
+
+
+## 约定:
+
+
 事务->长期事务和短期事务
 
 baseURL:`localhost:1221`
 
 
-#### 总事务获取 
+## 前置条件
 
-##### GET `/all/affairs` 获取所有事务
+
+除了登陆和注册,所有请求需要在`Header`中带上`token`
+
+
+
+## 注册登陆
+
+
+#### POST `/auth/register` 注册用户
+
+Payload:
+```json
+{
+	"password":"123456",
+	"username":"test"
+}
+```
+
+Success(200):
+```json
+{
+    "data": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJleHAiOjE1Nzk3Njk5OTcsImlzcyI6IlNjaF9tYW4ifQ.XOaEfXMfBlqvygRscBHURg5lbdO-35ZuD6kBUnPxows", //token
+    "error":0,
+    "msg": "success"
+}
+```
+
+#### Post `/auth/login` 用户登陆
+Payload:
+```json
+{
+	"password":"123456",
+	"username":"test"
+}
+```
+
+success(200):
+```json
+{
+    "data": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJleHAiOjE1Nzk3NzAzOTgsImlzcyI6IlNjaF9tYW4ifQ.4EyXUN1y93YNC_TKZR6uShmEyUmQUlTSM1fHTdY4C2o", //token
+    "error": 0,
+    "msg": "success"
+}
+```
+
+
+## 总事务获取 
+
+
+#### GET `/all/affairs` 获取所有事务
 
 Success(200)
 ```json
@@ -35,7 +98,7 @@ Success(200)
 }
 ```
 
-##### GET `/all/dailyAffairs` 获取所有每日任务
+#### GET `/all/dailyAffairs` 获取所有每日任务
 
 Success(200)
 ```json
@@ -56,9 +119,10 @@ Success(200)
 ```
 
 
-#### 操作事务
+## 操作事务
 
-##### POST `/opera/add` 增
+
+#### POST `/opera/add` 增
 
 Payload:
 ```json
@@ -78,7 +142,7 @@ Success(200):
 }
 ```
 
-##### DELETE `/opera` 删
+#### DELETE `/opera` 删
 
 Query:
 
@@ -93,7 +157,7 @@ Success(200)
 }
 ```
 
-##### PUT `/opera` 改
+#### PUT `/opera` 改
 
 Query:
 
@@ -118,9 +182,10 @@ Success(200)
 ```
 
 
-#### 操作每日任务
+## 操作每日任务
 
-##### POST `/operaDaily/add` 增
+
+#### POST `/operaDaily/add` 增
 
 Payload:
 ```json
@@ -139,7 +204,7 @@ Success(200)
 }
 ```
 
-##### DELETE `/operaDaily` 删
+#### DELETE `/operaDaily` 删
 
 Query:
 
@@ -154,7 +219,7 @@ Success(200):
 }
 ```
 
-##### PUT `/operaDaily` 改
+#### PUT `/operaDaily` 改
 
 Query:
 
@@ -176,12 +241,22 @@ Success(200):
 }
 ```
 
+
+## 错误码对照表
+
+
 |错误码对照表|含义|msg|
 ---|---|---|
+|30200|token过期,需要重新登陆|`Token Expired`|
 |40000|json格式错误|`Wrong Format Of JSON`|
+|40010|Header错误|`Wrong Format Of Header`|
+|40020|无效Token|`Wrong Format of Token`|
+|40030|用户名重复|`Duplicate username`|
 |40400|传入的参数无法解析|`Unable To Parse arameters`|
+|40410|用户名或者密码错误|`Username or Password Wrong`|
 |40410|访问的数据不存在|`Not Found`|
 |50000|合法数据无法插入数据库|`Can't Insert Into Database`|
+|50010|生成token失败|`Can't Generate Token`|
 
 
 
