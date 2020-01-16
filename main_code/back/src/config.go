@@ -24,7 +24,7 @@ type Conf struct {
 func (s *Service) ConfigInit() {
 	//confPath := "../SMS_config/conf.toml"
 
-	confPath := "./SMS_config/conf.toml"
+	confPath := "./SMS_config/conf_test.toml"
 	//c := new(Conf)
 
 	_, err := toml.DecodeFile(confPath, &s.Config)

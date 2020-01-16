@@ -1,0 +1,9 @@
+[DB]
+Address = "127.0.0.1"
+User = "for_dala_Er3ASsd6s352d"
+Password  = "aS#d4wxg23d"
+DBName = "TEST_temp"
+#DBName = "go_test"
+
+[Web]
+Port = ":12210"
