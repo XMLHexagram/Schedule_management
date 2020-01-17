@@ -6,4 +6,4 @@ DBName = "test_python"
 #DBName = "go_test"
 
 [Web]
-Port = ":1221"
+Port = ":12210"
