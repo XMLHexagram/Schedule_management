@@ -29,6 +29,11 @@ type dailyEvent struct {
 	Owner string
 }
 
+type InvitationCode struct {
+	gorm.Model
+	Code string
+}
+
 func (s *Service) DBInit()  {
 	strDb := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		s.Config.DB.User,
@@ -42,6 +47,7 @@ func (s *Service) DBInit()  {
 	db.AutoMigrate(&affair{})
 	db.AutoMigrate(&dailyEvent{})
 	db.AutoMigrate(&User{})
+	db.AutoMigrate(&InvitationCode{})
 	s.DB = db
 	//fmt.Println(s.DB)
 }

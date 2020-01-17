@@ -8,6 +8,7 @@ import (
 type InputUser struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
+	Code     string `json:"code"`
 }
 
 func (s *Service) register(c *gin.Context) (int, interface{}) {
@@ -15,6 +16,12 @@ func (s *Service) register(c *gin.Context) (int, interface{}) {
 	err := c.BindJSON(tempUser)
 	if err != nil || tempUser.Username == "" || tempUser.Password == "" {
 		return makeErrorReturn(400, 40000, "Wrong Format of JSON")
+	}
+
+	tempInvitationCode := new(InvitationCode)
+	s.DB.Table("invitation_codes").Where("code = ?", tempUser.Code).Find(tempInvitationCode)
+	if tempInvitationCode.ID <= 0 {
+		return makeErrorReturn(404,40420,"Invitation Code Wrong")
 	}
 
 	dbUser := new(User)
