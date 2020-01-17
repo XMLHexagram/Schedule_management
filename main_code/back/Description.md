@@ -30,4 +30,7 @@ Port = ":1221"                  # 使用的接口,注意':'不能少
         - [Allsystem.go 获取所有事务](src/AllSystem.go)
         - [DailySystem.go 操作每日任务](src/DailySystem.go)
         - [EventsSystem.go 操作长期事务](src/EventsSystem.go)
+        - [authSystem.go 处理auth(认证)行为](src/authSystem.go)
+    - [jwt.go toekn生成和识别](src/jwt.go)
+    - [middlewareOfJwt.go 登陆校验中间件](src/middlewareOfJwt.go)
 - [error.go 处理程序上的错误](src/error.go)

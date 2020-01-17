@@ -36,8 +36,9 @@ baseURL:`localhost:12210`
 Payload:
 ```json
 {
-	"password":"123456",
-	"username":"test"
+    "password":"123456",
+    "username":"test",
+    "code":"hlkjlhaslid" //邀请码
 }
 ```
 
@@ -245,6 +246,8 @@ Success(200):
 ## 错误码对照表
 
 
+注:出现`500`错误,则一般是后端出错
+
 |错误码对照表|含义|msg|
 ---|---|---|
 |30200|token过期,需要重新登陆|`Token Expired`|
@@ -252,9 +255,9 @@ Success(200):
 |40010|Header错误|`Wrong Format Of Header`|
 |40020|无效Token|`Wrong Format of Token`|
 |40030|用户名重复|`Duplicate username`|
-|40400|传入的参数无法解析|`Unable To Parse arameters`|
+|40400|传入的参数无法解析|`Unable To Parse Parameters`|
 |40410|用户名或者密码错误|`Username or Password Wrong`|
-|40410|访问的数据不存在|`Not Found`|
+|40420|邀请码错误|`Invitation Code Wrong`|
 |50000|合法数据无法插入数据库|`Can't Insert Into Database`|
 |50010|生成token失败|`Can't Generate Token`|
 |50020|中间件出错|`Middleware Wrong`|
