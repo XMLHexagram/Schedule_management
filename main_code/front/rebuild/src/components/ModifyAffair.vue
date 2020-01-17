@@ -104,20 +104,6 @@ export default {
         location.reload()
       });
     },
-    addAffair: function() {
-      this.showAdd = false;
-      axios({
-        method: "post",
-        url: baseURL + "/opera/add",
-        data: {
-          title: this.tempAffair.title,
-          extra: this.tempAffair.extra,
-          deadline: this.currentDate
-        }
-      }).then(() => {
-        location.reload()
-      });
-    }
   }
 };
 </script>
