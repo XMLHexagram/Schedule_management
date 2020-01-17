@@ -26,8 +26,9 @@ lmx-Hexagram:
 * 普通一本大学，计算机系在读学生。
 * 项目杂谈：学校生活，事务繁忙，希望以此程序帮助自己管理事务。也是第二次写这个项目了，第一次的代码因为某些原因无法使用(原本用的linux系统被搞坏了)。希望能以这个项目，作为一个开始。
 
-legends-killer:
-
+ljz (also legends-killer):
+* 杭州某不知名高校大一萌新，只会嘤嘤嘤？
+* 目前负责前端代码，以后可能会做个iOS客户端（咕~）
 
 
 ## 开发语言
@@ -91,7 +92,9 @@ legends-killer:
 
 *Go All Out To Win.*
 
-<p align="right">lmx-Hexagram</p>
+*What is borken can be reforged.* 
+
+<p align="right">lmx-Hexagram & legends-killer</p>
 
 
 
