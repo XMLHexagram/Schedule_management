@@ -62,11 +62,6 @@ export default {
   },
   
   methods: {
-    // ParentFunction: function(msg) {
-    //   console.log("fa");
-    //   console.log("子组件传过来的值", msg);
-    //   this.ckey += msg;
-    // }
     logout: function() {
         localStorage.removeItem("token")
         this.$router.push('/')
