@@ -123,6 +123,7 @@ import axios from "axios";
 import { baseURL } from "../main";
 import { Dialog } from "vant";
 import AddLTA from "./AddLongTermAffair";
+import {ApiInstance} from "../instances/index"
 // import changeBG from "./ChangeBG";
 // import {apiGet} from "../api";
 
@@ -153,23 +154,35 @@ export default {
       this.showDetail = true;
       this.tempAffair = this.Affairs[index];
     },
-    getAffairs: function() {
-      axios
-        .get(baseURL + "/all/affairs",
+    async getAffairs() {
+    //   const token = localStorage.getItem("token")
+    //   axios
+    //     .get(baseURL + "/all/affairs",
+    //         {
+    //             headers: {
+    //                 Authorization: token
+    //             }
+    //         }
+    //     )
+    //     .then(res => {
+    //       this.Affairs = res.data.data;
+    //     })
+    //     .catch(err => {
+    //       this.Affairs = err;
+    //       alert("我们遇到了未知错误，这有可能导致程序无法正常运行");
+    //     });
+    try {
+          const { data: res } = await ApiInstance.post(
+            baseURL + "/all/affairs",
             {
-                params: {
-                    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJleHAiOjE1Nzk3Njk5OTcsImlzcyI6IlNjaF9tYW4ifQ.XOaEfXMfBlqvygRscBHURg5lbdO-35ZuD6kBUnPxows'
+                headers: {
+                    Authorization: token
                 }
             }
-        )
-        .then(res => {
-          this.Affairs = res.data.data;
-        })
-        .catch(err => {
-          this.Affairs = err;
-          alert("我们遇到了未知错误，这有可能导致程序无法正常运行");
-        });
+          );
+        } catch (e) {}
     },
+    
     deleteAffair: function(id) {
       Dialog.confirm({
         // title: '标题',

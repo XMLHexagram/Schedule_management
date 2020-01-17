@@ -69,22 +69,38 @@ export default {
   },
   methods: {
     addDailyAffair: function() {
+      // try {
+      //   this.showAdd = false;
+      //   axios({
+      //     method: "post",
+      //     url: baseURL + "/opera/add",
+      //     data: {
+      //       title: this.tempAffair.title,
+      //       extra: this.tempAffair.extra,
+      //       deadline: this.currentDate
+      //     }
+      //   }).then(() => {
+      //     location.reload()
+      //   });
+      // } catch (error) {
+      //   alert("添加失败");
+      // }
+      console.log(1)
       try {
         this.showAdd = false;
-        axios({
-          method: "post",
-          url: baseURL + "/opera/add",
+        console.log(2)
+        const { data: res } =  ApiInstance.post(baseURL + "/opera/add", {
+          headers: {
+            Authorization: token
+          },
           data: {
             title: this.tempAffair.title,
             extra: this.tempAffair.extra,
             deadline: this.currentDate
           }
-        }).then(() => {
-          location.reload()
         });
-      } catch (error) {
-        alert("添加失败");
-      }
+        console.log(3)
+      } catch (e) {}
     },
     handleInput(value) {
       this.$emit("input", value);

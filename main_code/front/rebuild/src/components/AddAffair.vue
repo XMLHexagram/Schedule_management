@@ -4,7 +4,7 @@
       :value="show"
       @input="handleInput"
       position="top"
-      style="border-radius: 0 0 15px 15px; background-color: rgba(0.7,0.7,0.7,0.3)"
+      style="border-radius: 0 0 15px 15px"
       :style="{ height: '45%' }"
     >
       <div style="background-color: rgba(0,0,0,0)">
@@ -26,7 +26,7 @@
               <van-button plain type="info" v-on:click="() => show = false">返回</van-button>
             </van-col>
             <van-col span="6" offset="7">
-              <van-button plain type="primary" v-on:click="addDailyAffair(tempAffair.id)">提交</van-button>
+              <van-button plain type="primary" v-on:click="addDailyAffair()">提交</van-button>
             </van-col>
           </van-row>
         </form>
@@ -47,8 +47,9 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 import { baseURL } from "../main";
+import {ApiInstance} from "../instances/index"
 export default {
   name: "AddAffair",
   props: ["value"],
@@ -68,25 +69,42 @@ export default {
     }
   },
   methods: {
-    addDailyAffair: function() {
+    async addDailyAffair() {
+      // try {
+      //   this.show = false;
+      //   axios({
+      //     method: "post",
+      //     url: baseURL + "/operaDaily/add",
+      //     data: {
+      //       title: this.tempAffair.title,
+      //       extra: this.tempAffair.extra,
+      //       deadline: this.currentDate
+      //     }
+      //   }).then(() => {
+      //     // this.getDailyAffairs();
+
+      //       location.reload();
+      //   });
+      // } catch (error) {
+      //   alert("添加失败");
+      // }
       try {
-        this.show = false;
-        axios({
-          method: "post",
-          url: baseURL + "/operaDaily/add",
-          data: {
-            title: this.tempAffair.title,
-            extra: this.tempAffair.extra,
-            deadline: this.currentDate
+        console.log(1)
+        const { data: res } = await ApiInstance.post(
+          baseURL + "/operaDaily/add",
+          {
+            headers: {
+              Authorization: token
+            },
+            data: {
+              title: this.tempAffair.title,
+              extra: this.tempAffair.extra,
+              deadline: this.currentDate,
+            }
           }
-        }).then(() => {
-        //   this.getDailyAffairs();
-            
-            location.reload();
-        });
-      } catch (error) {
-        alert("添加失败");
-      }
+        );
+        console.log(res)
+      } catch (e) {}
     },
     handleInput(value) {
       this.$emit("input", value);
@@ -100,12 +118,11 @@ export default {
       let h = this.currentDate.getHours();
       let minute = this.currentDate.getMinutes();
       minute = minute < 10 ? "0" + minute : minute;
-    //   let second = this.currentDate.getSeconds();
-    //   second = minute < 10 ? "0" + second : second;
+      //   let second = this.currentDate.getSeconds();
+      //   second = minute < 10 ? "0" + second : second;
 
-      this.tempAffair.deadline =
-        y + "-" + m + "-" + d + " " + h + ":" + minute;
-    },
+      this.tempAffair.deadline = y + "-" + m + "-" + d + " " + h + ":" + minute;
+    }
   }
 };
 </script>
