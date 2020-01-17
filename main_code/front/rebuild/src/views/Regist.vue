@@ -44,6 +44,7 @@
 <script>
 import axios from "axios";
 import { baseURL } from "../main";
+import {ApiInstance} from "../instances/index"
 export default {
   name: "regist",
   data() {
@@ -56,24 +57,17 @@ export default {
   },
   methods: {
     async regist() {
-      await axios
-        .post(baseURL + "/auth/register", {
-          username: this.username,
-          password: this.password,
-          code: this.code
-        })
-        .then(res => {
-          this.token = res.data.data;
-          localStorage.setItem("token", this.token);
-          alert("注册成功！");
-          this.$router.push("/home");
-        })
-        .catch(err => {
-          this.token = err;
-          console.log(1);
-          console.log(this.token);
-          alert("注册的时候好像有未知错误嘤？");
-        });
+      try {
+            const {data: res} = await ApiInstance.post(baseURL + '/auth/register',
+                {username: this.username, password: this.password, code: this.code}
+                )
+                const token = res.data
+                //console.log(token)
+                localStorage.setItem("token",token)
+                alert("注册成功")
+                this.$router.push('/')
+        } catch (e) {
+        }
     }
   },
 };

@@ -32,8 +32,9 @@
 </template>
 
 <script>
-import axios from 'axios'
-//import { baseURL } from "../main";
+// import axios from 'axios'
+import {ApiInstance} from '../instances/index'
+import { baseURL } from "../main";
 
 export default {
   name: 'login',
@@ -64,21 +65,34 @@ export default {
         //   }
         // })
         // this.info = studentInfoRes.data.data
-        this.$router.push("home");
+        this.$router.push("/home");
       } else {
-        // 如果本地没有 token，则直接跳转到数字杭电的授权地址
-        // 文档参见：https://git.hduhelp.com/Lemon/api_gateway_new（GET /login/url/{GrantType} 获取登录链接）
-        const casUrlRes = (await axios.get('/login/url/cas', {
-          // 两个传入参数：
-          params: {
-            // clientID: 由后台部提供，测试可以填写 oa
-            clientID: 'oa',
-            //  redirect：获取 token 的地址，这里填写的 ${window.location.origin}/#/auth 是实际访问到 Auth.vue 的地址
-            redirect: `${window.location.origin}/#/auth`
-          }
-        })).data
-        const redirectURL = casUrlRes.data.url
-        window.location.href = redirectURL
+          try {
+            const {data: res} = await ApiInstance.post(baseURL + '/auth/login',
+                {username: this.username, password:this.password}
+                )
+        } catch (e) {
+        }
+        // // 如果本地没有 token，则直接跳转到数字杭电的授权地址
+        // // 文档参见：https://git.hduhelp.com/Lemon/api_gateway_new（GET /login/url/{GrantType} 获取登录链接）
+        // const casUrlRes = (await axios.get('/login/url/cas', {
+        //   // 两个传入参数：
+        //   params: {
+        //     // clientID: 由后台部提供，测试可以填写 oa
+        //     clientID: 'oa',
+        //     //  redirect：获取 token 的地址，这里填写的 ${window.location.origin}/#/auth 是实际访问到 Auth.vue 的地址
+        //     redirect: `${window.location.origin}/#/auth`
+        //   }
+        // })).data
+        // const redirectURL = casUrlRes.data.url
+        // window.location.href = redirectURL
+    
+        // await axios
+        // .post("/auth/login",{
+        //     username: this.username,
+        //     password: this.password
+        // })
+        // .then()
       }
     }
   },
