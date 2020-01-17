@@ -26,6 +26,7 @@
       </van-tab>
     </van-tabs>
     <changeBG />
+    <button type="info" v-on:click="logout">登出</button>
   </div>
 </template>
 
@@ -43,6 +44,13 @@ export default {
     Affairs,
     changeBG
   },
+  async created() {
+      const token = localStorage.getItem("token");
+      console.log(token)
+      if (token == null) {
+          this.$router.push("/")
+      }
+  },
   data() {
     return {
       active: 2,
@@ -52,12 +60,17 @@ export default {
       ckey: 1
     };
   },
+  
   methods: {
     // ParentFunction: function(msg) {
     //   console.log("fa");
     //   console.log("子组件传过来的值", msg);
     //   this.ckey += msg;
     // }
+    logout: function() {
+        localStorage.removeItem("token")
+        this.$router.push('/')
+    }
   }
 };
 </script>
