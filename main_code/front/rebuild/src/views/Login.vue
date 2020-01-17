@@ -24,7 +24,10 @@
       <div class="btn-group">
         <button type="submit" class="btn btn-primary" aria-haspopup="true" aria-expanded="false">
           戳我登录
-          <span class="caret"></span>
+        </button>
+        <p>没有账号？</p>
+        <button @click="goToRegist" class="btn btn-primary" aria-haspopup="true" aria-expanded="false">
+          戳我注册
         </button>
       </div>
     </form>
@@ -53,7 +56,7 @@ export default {
     async auth() {
       // localStorage 使用文档：https://developer.mozilla.org/zh-CN/docs/Web/API/Window/localStorage
       const token = localStorage.getItem("token");
-      if (token !== null) {
+      if (token != null) {
         this.$router.push("/home");
       } else {
         try {
@@ -61,10 +64,15 @@ export default {
             baseURL + "/auth/login",
             { username: this.username, password: this.password }
           );
-          localStorage.setItem("token", token);
-          this.$router.push("/");
+          const token1 = res.data;
+          localStorage.setItem("token", token1);
+          console.log(token1)
+          this.$router.push("/home");
         } catch (e) {}
       }
+    },
+    goToRegist() {
+      this.$router.push("/regist")
     }
   }
 };
