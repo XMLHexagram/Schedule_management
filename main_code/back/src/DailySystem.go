@@ -47,7 +47,7 @@ func (s *Service) deleteDailyEvents(c *gin.Context, owner string) (int, interfac
 	temp := new(dailyEvent)
 
 	s.DB.Where("id = ? AND owner = ?", id, owner).Find(temp)
-	if temp.Title == "" {
+	if temp.ID <= 0 {
 		return makeErrorReturn(404, 40410, "Not Found")
 
 	}
@@ -70,7 +70,7 @@ func (s *Service) modifyDailyEvents(c *gin.Context, owner string) (int, interfac
 	temp := new(dailyEvent)
 	s.DB.Where("id = ? AND owner = ?", id, owner).Find(temp)
 	//s.DB.Where(&affair{Model: gorm.Model{ID: id}}).Find(temp)
-	if temp.Title == "" {
+	if temp.ID <= 0 {
 		return makeErrorReturn(404, 40410, "Not Found")
 	}
 
