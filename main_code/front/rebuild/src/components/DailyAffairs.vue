@@ -42,7 +42,13 @@ export default {
   methods: {
     getDailyAffairs: function() {
       axios
-        .get(baseURL + "/all/dailyAffairs")
+        .get(baseURL + "/all/dailyAffairs",
+            {
+                params: {
+                    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJleHAiOjE1Nzk3Njk5OTcsImlzcyI6IlNjaF9tYW4ifQ.XOaEfXMfBlqvygRscBHURg5lbdO-35ZuD6kBUnPxows'
+                }
+            }
+        )
         .then(res => {
           this.dailyAffairs = res.data.data;
         })

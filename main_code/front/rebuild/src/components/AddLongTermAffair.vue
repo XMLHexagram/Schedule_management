@@ -70,19 +70,17 @@ export default {
   methods: {
     addDailyAffair: function() {
       try {
-        this.show = false;
+        this.showAdd = false;
         axios({
           method: "post",
-          url: baseURL + "/operaDaily/add",
+          url: baseURL + "/opera/add",
           data: {
             title: this.tempAffair.title,
             extra: this.tempAffair.extra,
             deadline: this.currentDate
           }
         }).then(() => {
-        //   this.getDailyAffairs();
-            
-            location.reload();
+          location.reload()
         });
       } catch (error) {
         alert("添加失败");
@@ -100,12 +98,9 @@ export default {
       let h = this.currentDate.getHours();
       let minute = this.currentDate.getMinutes();
       minute = minute < 10 ? "0" + minute : minute;
-    //   let second = this.currentDate.getSeconds();
-    //   second = minute < 10 ? "0" + second : second;
-
       this.tempAffair.deadline =
-        y + "-" + m + "-" + d + " " + h + ":" + minute;
-    },
+        y + "-" + m + "-" + d + "   " + h + ":" + minute;
+    }
   }
 };
 </script>
