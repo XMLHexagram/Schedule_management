@@ -123,7 +123,7 @@ import axios from "axios";
 import { baseURL } from "../main";
 import { Dialog } from "vant";
 import AddLTA from "./AddLongTermAffair";
-import {ApiInstance} from "../instances/index"
+import { ApiInstance } from "../instances/index";
 // import changeBG from "./ChangeBG";
 // import {apiGet} from "../api";
 
@@ -133,7 +133,7 @@ export default {
     // msg: String
   },
   components: {
-    AddLTA,
+    AddLTA
     // changeBG
   },
   data() {
@@ -155,34 +155,32 @@ export default {
       this.tempAffair = this.Affairs[index];
     },
     async getAffairs() {
-    //   const token = localStorage.getItem("token")
-    //   axios
-    //     .get(baseURL + "/all/affairs",
-    //         {
-    //             headers: {
-    //                 Authorization: token
-    //             }
-    //         }
-    //     )
-    //     .then(res => {
-    //       this.Affairs = res.data.data;
-    //     })
-    //     .catch(err => {
-    //       this.Affairs = err;
-    //       alert("我们遇到了未知错误，这有可能导致程序无法正常运行");
-    //     });
-    try {
-          const { data: res } = await ApiInstance.post(
-            baseURL + "/all/affairs",
-            {
-                headers: {
-                    Authorization: token
-                }
-            }
-          );
-        } catch (e) {}
+      //   const token = localStorage.getItem("token")
+      //   axios
+      //     .get(baseURL + "/all/affairs",
+      //         {
+      //             headers: {
+      //                 Authorization: token
+      //             }
+      //         }
+      //     )
+      //     .then(res => {
+      //       this.Affairs = res.data.data;
+      //     })
+      //     .catch(err => {
+      //       this.Affairs = err;
+      //       alert("我们遇到了未知错误，这有可能导致程序无法正常运行");
+      //     });
+      try {
+        const token = localStorage.getItem("token");
+        const { data: res } = await ApiInstance.get(baseURL + "/all/affairs", {
+          headers: {
+            Authorization: token
+          }
+        });
+      } catch (e) {}
     },
-    
+
     deleteAffair: function(id) {
       Dialog.confirm({
         // title: '标题',
@@ -214,7 +212,7 @@ export default {
       }).then(() => {
         this.getAffairs();
       });
-    },
+    }
   }
 };
 </script>

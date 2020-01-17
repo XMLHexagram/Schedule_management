@@ -49,7 +49,7 @@
 <script>
 // import axios from "axios";
 import { baseURL } from "../main";
-import {ApiInstance} from "../instances/index"
+import { ApiInstance } from "../instances/index";
 export default {
   name: "AddAffair",
   props: ["value"],
@@ -89,21 +89,22 @@ export default {
       //   alert("添加失败");
       // }
       try {
-        console.log(1)
+        // console.log(1)
+        const token = localStorage.getItem("token");
         const { data: res } = await ApiInstance.post(
           baseURL + "/operaDaily/add",
           {
+            title: this.tempAffair.title,
+            extra: this.tempAffair.extra,
+            deadline: this.currentDate
+          },
+          {
             headers: {
               Authorization: token
-            },
-            data: {
-              title: this.tempAffair.title,
-              extra: this.tempAffair.extra,
-              deadline: this.currentDate,
             }
           }
         );
-        console.log(res)
+        window.location.reload();
       } catch (e) {}
     },
     handleInput(value) {

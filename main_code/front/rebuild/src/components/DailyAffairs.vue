@@ -13,6 +13,7 @@
       <van-button type="info" @click="() => showPopup = true" style="margin: 10px">添加任务</van-button>
     </van-row>
     <AddAffair v-model="showPopup" />
+    <button @click="getDailyAffairs">啊啊啊</button>
   </div>
 </template>
 
@@ -21,6 +22,7 @@ import axios from "axios";
 import { Dialog } from "vant";
 import { baseURL } from "../main";
 import AddAffair from "./AddAffair";
+import {ApiInstance} from "../instances/index"
 
 export default {
   name: "DailyAffairs",
@@ -37,6 +39,7 @@ export default {
     };
   },
   created() {
+    console.log(2)
     this.getDailyAffairs();
   },
   methods: {
@@ -58,14 +61,20 @@ export default {
       //     alert("我们遇到了未知错误，这有可能导致程序无法正常运行");
       //   });
       try {
-        const { data: res } = await ApiInstance.post(
+        // console.log(1)
+        const token = localStorage.getItem("token")
+        // console.log(token)
+        const { data: res } = await ApiInstance.get(
           baseURL + "/all/dailyAffairs",
           {
             headers: {
-              Authorization: token
+              Authorization: token,
             }
           }
         );
+        console.log(res.data.data)
+        this.dailyAffairs = res.data
+        console.log(this.dailyAffairs)
       } catch (e) {}
     },
     showCheck: function(id) {

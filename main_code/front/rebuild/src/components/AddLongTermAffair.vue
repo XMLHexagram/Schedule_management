@@ -49,6 +49,7 @@
 <script>
 import axios from "axios";
 import { baseURL } from "../main";
+import { ApiInstance } from "../instances/index";
 export default {
   name: "AddAffair",
   props: ["value"],
@@ -85,21 +86,24 @@ export default {
       // } catch (error) {
       //   alert("添加失败");
       // }
-      console.log(1)
+      console.log(1);
       try {
         this.showAdd = false;
-        console.log(2)
-        const { data: res } =  ApiInstance.post(baseURL + "/opera/add", {
-          headers: {
-            Authorization: token
-          },
-          data: {
+        const token = localStorage.getItem("token");
+        const { data: res } = ApiInstance.post(
+          baseURL + "/opera/add",
+          {
             title: this.tempAffair.title,
             extra: this.tempAffair.extra,
             deadline: this.currentDate
+          },
+          {
+            headers: {
+              Authorization: token
+            }
           }
-        });
-        console.log(3)
+        );
+        window.location.reload();
       } catch (e) {}
     },
     handleInput(value) {
