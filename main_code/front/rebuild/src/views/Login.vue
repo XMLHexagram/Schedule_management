@@ -32,46 +32,48 @@
 </template>
 
 <script>
-import {ApiInstance} from '../instances/index'
+import { ApiInstance } from "../instances/index";
 import { baseURL } from "../main";
 
 export default {
-  name: 'login',
-  data () {
+  name: "login",
+  data() {
     return {
-        username: "",
-        password: "",
+      username: "",
+      password: ""
+    };
+  },
+  async created() {
+    const token = localStorage.getItem("token");
+    if (token != null) {
+      this.$router.push("/home");
     }
   },
-  async created(){
-      const token = localStorage.getItem("token");
-      if (token != null) {
-          this.$router.push("/home")
-      }
-  },
   methods: {
-    async auth () {
+    async auth() {
       // localStorage 使用文档：https://developer.mozilla.org/zh-CN/docs/Web/API/Window/localStorage
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem("token");
       if (token !== null) {
         this.$router.push("/home");
       } else {
-          try {
-            const {data: res} = await ApiInstance.post(baseURL + '/auth/login',
-                {username: this.username, password:this.password}
-                )
-        } catch (e) {
-        }
+        try {
+          const { data: res } = await ApiInstance.post(
+            baseURL + "/auth/login",
+            { username: this.username, password: this.password }
+          );
+          localStorage.setItem("token", token);
+          this.$router.push("/");
+        } catch (e) {}
       }
     }
-  },
-}
+  }
+};
 </script>
 
 <style>
 .login {
-    display: flex;
-    margin: 0px;
-    align-content: center;
+  display: flex;
+  margin: 0px;
+  align-content: center;
 }
 </style>
