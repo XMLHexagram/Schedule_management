@@ -18,7 +18,7 @@
 
 事务->长期事务和短期事务
 
-baseURL:`localhost:1221`
+baseURL:`localhost:12210`
 
 
 ## 前置条件
@@ -257,6 +257,7 @@ Success(200):
 |40410|访问的数据不存在|`Not Found`|
 |50000|合法数据无法插入数据库|`Can't Insert Into Database`|
 |50010|生成token失败|`Can't Generate Token`|
+|50020|中间件出错|`Middleware Wrong`|
 
 
 

@@ -30,7 +30,7 @@ func JWT() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-
+		c.Set("owner",claims.Username)
 		c.Next()
 	}
 }

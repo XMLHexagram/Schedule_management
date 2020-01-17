@@ -19,12 +19,14 @@ type affair struct {
 	Title    string
 	Deadline time.Time
 	Extra    string
+	Owner string
 }
 
 type dailyEvent struct {
 	gorm.Model
 	Title string
 	Extra string
+	Owner string
 }
 
 func (s *Service) DBInit()  {

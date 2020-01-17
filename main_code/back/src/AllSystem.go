@@ -2,15 +2,15 @@ package main
 
 import "github.com/gin-gonic/gin"
 
-func (s *Service) getDailyEvents(c *gin.Context) (int,interface{}){
+func (s *Service) getDailyEvents(c *gin.Context,owner string) (int,interface{}){
 	data := make([]*dailyEvent,0)
-	s.DB.Find(&data)
+	s.DB.Table("daily_events").Where("owner = ?",owner).Find(&data)
 	return makeSuccessReturn(200,data)
 }
 
-func (s *Service) getAllAffairs(c *gin.Context) (int,interface{}){
+func (s *Service) getAllAffairs(c *gin.Context,owner string) (int,interface{}){
 	data := make([]*affair,0,100)
-	s.DB.Find(&data)
+	s.DB.Table("affairs").Where("owner = ?",owner).Find(&data)
 	out := make([]*output,0,100)
 	for _,v := range data {
 		out = append(out, &output{

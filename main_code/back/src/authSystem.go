@@ -50,7 +50,7 @@ func (s *Service) login(c *gin.Context) (int, interface{}) {
 
 	dbUser := new(User)
 	s.DB.Table("users").Where("username = ? AND password = ?", tempUser.Username, tempUser.Password).Find(dbUser)
-	if dbUser.ID < 0 {
+	if dbUser.ID <= 0 {
 		return makeErrorReturn(404, 40410, "Username or Password Wrong")
 	}
 

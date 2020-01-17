@@ -2,6 +2,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -11,35 +12,36 @@ type toReturn func(*gin.Context)
 func (s *Service) RouterInit() {
 	r := gin.Default()
 	r.Use(cors.Default())
+	r.Use(gin.Recovery())
 
 	auth := r.Group("/auth")
 	{
-		auth.POST("/login",requestEntry(s.login))
-		auth.POST("/register",requestEntry(s.register))
+		auth.POST("/login",requestEntryDefault(s.login))
+		auth.POST("/register",requestEntryDefault(s.register))
 	}
 
 	all := r.Group("/all")
 	all.Use(JWT())
 	{
-		all.GET("/affairs", requestEntry(s.getAllAffairs))
-		all.GET("/dailyAffairs", requestEntry(s.getDailyEvents))
+		all.GET("/affairs", requestEntryWithStatus(s.getAllAffairs))
+		all.GET("/dailyAffairs", requestEntryWithStatus(s.getDailyEvents))
 	}
 
 	operaDaily := r.Group("/operaDaily")
 	operaDaily.Use(JWT())
 	{
-		operaDaily.POST("/add", requestEntry(s.addDailyEvents))
-		operaDaily.DELETE("", requestEntry(s.deleteDailyEvents))
-		operaDaily.PUT("", requestEntry(s.modifyDailyEvents))
+		operaDaily.POST("/add", requestEntryWithStatus(s.addDailyEvents))
+		operaDaily.DELETE("", requestEntryWithStatus(s.deleteDailyEvents))
+		operaDaily.PUT("", requestEntryWithStatus(s.modifyDailyEvents))
 		//operaDaily.GET()
 	}
 
 	opera := r.Group("/opera")
 	opera.Use(JWT())
 	{
-		opera.POST("/add", requestEntry(s.addAffair))  //增
-		opera.DELETE("", requestEntry(s.deleteAffair)) //删
-		opera.PUT("", requestEntry(s.modifyAffair))    //改
+		opera.POST("/add", requestEntryWithStatus(s.addAffair))  //增
+		opera.DELETE("", requestEntryWithStatus(s.deleteAffair)) //删
+		opera.PUT("", requestEntryWithStatus(s.modifyAffair))    //改
 		//opera.GET("/find", s.findAffair) //查
 	}
 
@@ -48,7 +50,19 @@ func (s *Service) RouterInit() {
 	DealError(err)
 }
 
-func requestEntry(f func(c *gin.Context) (int, interface{})) gin.HandlerFunc {
+func requestEntryWithStatus(f func(c *gin.Context,owner string) (int, interface{})) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		tempOwner,exist:=c.Get("owner")
+		strOwner := fmt.Sprintf("%v",tempOwner)
+		if !exist {
+			c.JSON(makeErrorReturn(500,50020,"Middleware Wrong"))
+		}
+
+		c.JSON(f(c,strOwner))
+	}
+}
+
+func requestEntryDefault(f func(c *gin.Context) (int, interface{})) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.JSON(f(c))
 	}
