@@ -13,7 +13,6 @@
       <van-button type="info" @click="() => showPopup = true" style="margin: 10px">添加任务</van-button>
     </van-row>
     <AddAffair v-model="showPopup" />
-    <!-- <button @click="getDailyAffairs">啊啊啊</button> -->
   </div>
 </template>
 
