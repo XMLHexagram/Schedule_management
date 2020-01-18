@@ -13,7 +13,7 @@
       <van-button type="info" @click="() => showPopup = true" style="margin: 10px">添加任务</van-button>
     </van-row>
     <AddAffair v-model="showPopup" />
-    <button @click="getDailyAffairs">啊啊啊</button>
+    <!-- <button @click="getDailyAffairs">啊啊啊</button> -->
   </div>
 </template>
 
@@ -44,26 +44,8 @@ export default {
   },
   methods: {
     async getDailyAffairs() {
-      // const token = localStorage.getItem("token")
-      // axios
-      //   .get(baseURL + "/all/dailyAffairs",
-      //       {
-      //           headers: {
-      //               Authorization: token
-      //           }
-      //       }
-      //   )
-      //   .then(res => {
-      //     this.dailyAffairs = res.data.data;
-      //   })
-      //   .catch(err => {
-      //     this.dailyAffairs = err;
-      //     alert("我们遇到了未知错误，这有可能导致程序无法正常运行");
-      //   });
       try {
-        // console.log(1)
         const token = localStorage.getItem("token")
-        // console.log(token)
         const { data: res } = await ApiInstance.get(
           baseURL + "/all/dailyAffairs",
           {
@@ -72,9 +54,7 @@ export default {
             }
           }
         );
-        console.log(res.data.data)
         this.dailyAffairs = res.data
-        console.log(this.dailyAffairs)
       } catch (e) {}
     },
     showCheck: function(id) {
@@ -89,16 +69,28 @@ export default {
           // on cancel
         });
     },
-    deleteDailyAffair: function(id) {
-      axios
-        .delete(baseURL + "/operaDaily?id=" + id)
-        .then(() => {
-          this.getDailyAffairs();
-        })
-        .catch(err => {
-          this.dailyAffairs = err;
-          alert("我们遇到了未知错误，这有可能导致程序无法正常运行");
-        });
+    async deleteDailyAffair(id) {
+      // axios
+      //   .delete(baseURL + "/operaDaily?id=" + id)
+      //   .then(() => {
+      //     this.getDailyAffairs();
+      //   })
+      //   .catch(err => {
+      //     this.dailyAffairs = err;
+      //     alert("我们遇到了未知错误，这有可能导致程序无法正常运行");
+      //   });
+      try {
+        const token = localStorage.getItem("token")
+        const { data: res } = await ApiInstance.delete(
+          baseURL + "/operaDaily?id=" + id,
+          {
+            headers: {
+              Authorization: token,
+            }
+          }
+        );
+        this.getDailyAffairs();
+      } catch (e) {}
     }
   }
 };

@@ -26,7 +26,7 @@
               <van-button plain type="info" v-on:click="() => show = false">返回</van-button>
             </van-col>
             <van-col span="6" offset="7">
-              <van-button plain type="primary" v-on:click="addDailyAffair(tempAffair.id)">提交</van-button>
+              <van-button plain type="primary" v-on:click="addDailyAffair(tempAffair.id)" v-bind:disabled="dis">提交</van-button>
             </van-col>
           </van-row>
         </form>
@@ -60,7 +60,8 @@ export default {
       showTimePacker: false,
       currentDate: new Date(),
       minDate: new Date(),
-      maxDate: new Date(2023, 0, 1)
+      maxDate: new Date(2023, 0, 1),
+      dis: false,
     };
   },
   watch: {
@@ -69,28 +70,13 @@ export default {
     }
   },
   methods: {
-    addDailyAffair: function() {
-      // try {
-      //   this.showAdd = false;
-      //   axios({
-      //     method: "post",
-      //     url: baseURL + "/opera/add",
-      //     data: {
-      //       title: this.tempAffair.title,
-      //       extra: this.tempAffair.extra,
-      //       deadline: this.currentDate
-      //     }
-      //   }).then(() => {
-      //     location.reload()
-      //   });
-      // } catch (error) {
-      //   alert("添加失败");
-      // }
+    async addDailyAffair() {
       console.log(1);
       try {
         this.showAdd = false;
+        this.dis = true;
         const token = localStorage.getItem("token");
-        const { data: res } = ApiInstance.post(
+        const { data: res } = await ApiInstance.post(
           baseURL + "/opera/add",
           {
             title: this.tempAffair.title,
@@ -103,6 +89,7 @@ export default {
             }
           }
         );
+        this.dis = false;
         window.location.reload();
       } catch (e) {}
     },

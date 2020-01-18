@@ -9,7 +9,6 @@
           v-on:click="controlShowDetail(index)"
           class="my_div"
         />
-
         <template slot="right">
           <van-button square type="primary" text="完成" v-on:click="deleteAffair(affair.id)" />
         </template>
@@ -60,7 +59,6 @@
           disabled
           type="textarea"
         />
-
         <van-row>
           <van-col offset="16">
             <van-button type="info" v-on:click="showModify=true">修改</van-button>
@@ -112,9 +110,19 @@
         </div>
       </van-popup>
     </transition>
-
     <!--添加新事物的弹出层-->
     <AddLTA v-model="showPopup" />
+    <!-- 时间选择 -->
+    <van-popup v-model="showTimePacker" position="bottom" :style="{ height: '30%' }">
+      <van-datetime-picker
+        :show-toolbar="false"
+        v-model="currentDate"
+        type="datetime"
+        :min-date="minDate"
+        :max-date="maxDate"
+        v-on:change="changeToDeadline"
+      />
+    </van-popup>
   </div>
 </template>
 
@@ -124,17 +132,13 @@ import { baseURL } from "../main";
 import { Dialog } from "vant";
 import AddLTA from "./AddLongTermAffair";
 import { ApiInstance } from "../instances/index";
-// import changeBG from "./ChangeBG";
-// import {apiGet} from "../api";
 
 export default {
   name: "Affairs",
   props: {
-    // msg: String
   },
   components: {
     AddLTA
-    // changeBG
   },
   data() {
     return {
@@ -142,8 +146,11 @@ export default {
       showDetail: false,
       showModify: false,
       showPopup: false,
-      showAdd: false,
-      tempAffair: []
+      tempAffair: [],
+      showTimePacker: false,
+      currentDate: new Date(),
+      minDate: new Date(),
+      maxDate: new Date(2023, 0, 1),
     };
   },
   created() {
@@ -154,23 +161,19 @@ export default {
       this.showDetail = true;
       this.tempAffair = this.Affairs[index];
     },
+    changeToDeadline: function() {
+      let y = this.currentDate.getFullYear();
+      let m = this.currentDate.getMonth() + 1;
+      m = m < 10 ? "0" + m : m;
+      let d = this.currentDate.getDate();
+      d = d < 10 ? "0" + d : d;
+      let h = this.currentDate.getHours();
+      let minute = this.currentDate.getMinutes();
+      minute = minute < 10 ? "0" + minute : minute;
+      this.tempAffair.deadline =
+        y + "-" + m + "-" + d + "   " + h + ":" + minute;
+    },
     async getAffairs() {
-      //   const token = localStorage.getItem("token")
-      //   axios
-      //     .get(baseURL + "/all/affairs",
-      //         {
-      //             headers: {
-      //                 Authorization: token
-      //             }
-      //         }
-      //     )
-      //     .then(res => {
-      //       this.Affairs = res.data.data;
-      //     })
-      //     .catch(err => {
-      //       this.Affairs = err;
-      //       alert("我们遇到了未知错误，这有可能导致程序无法正常运行");
-      //     });
       try {
         const token = localStorage.getItem("token");
         const { data: res } = await ApiInstance.get(baseURL + "/all/affairs", {
@@ -178,40 +181,44 @@ export default {
             Authorization: token
           }
         });
+        this.Affairs = res.data;
       } catch (e) {}
     },
-
-    deleteAffair: function(id) {
+    async deleteAffair(id) {
       Dialog.confirm({
         // title: '标题',
-        message: "确定完成了吗"
-      })
-        .then(() => {
-          let url = baseURL + "/opera?id=" + id;
-          axios.delete(url).then(() => {
-            // axios.delete('http://localhost:1221/opera/' + ID).then(() => {
-            this.getAffairs();
-          });
-        })
-        .catch(() => {
-          // on cancel
-        });
-    },
-    modifyAffair: function(id) {
-      this.showModify = false;
-      axios({
-        method: "put",
-        url: baseURL + "/opera?id=" + id,
-        data: {
-          title: this.tempAffair.title,
-          deadline: this.currentDate,
-          //这里如果传入this.tempAffair.deadline会返回json格式错误
-          //可能因为这个格式无法被解析成时间
-          extra: this.tempAffair.extra
-        }
+        message: "确定完成了吗?"
       }).then(() => {
-        this.getAffairs();
+        let url = baseURL + "/opera?id=" + id;
+        try {
+          const token = localStorage.getItem("token");
+          const { data: res } = ApiInstance.delete(url, {
+            headers: {
+              Authorization: token
+            }
+          });
+        } catch (e) {}
       });
+    },
+    async modifyAffair(id) {
+      this.showModify = false;
+      this.tempAffair.deadline = this.currentDate;
+      try {
+        const token = localStorage.getItem("token");
+        const { data: res } = ApiInstance.put(
+          baseURL + "/opera?id=" + id,
+          {
+            title: this.tempAffair.title,
+            deadline: this.tempAffair.deadline,
+            extra: this.tempAffair.extra
+          },
+          {
+            headers: {
+              Authorization: token
+            }
+          }
+        );
+      } catch (e) {}
     }
   }
 };
