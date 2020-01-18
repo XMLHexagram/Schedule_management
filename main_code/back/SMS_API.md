@@ -258,6 +258,7 @@ Success(200):
 |40400|传入的参数无法解析|`Unable To Parse Parameters`|
 |40410|用户名或者密码错误|`Username or Password Wrong`|
 |40420|邀请码错误|`Invitation Code Wrong`|
+|40430|要操作的事务不存在|`Not Found`|
 |50000|合法数据无法插入数据库|`Can't Insert Into Database`|
 |50010|生成token失败|`Can't Generate Token`|
 |50020|中间件出错|`Middleware Wrong`|
