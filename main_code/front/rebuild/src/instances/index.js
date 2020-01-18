@@ -11,6 +11,7 @@ const ApiErrorMsg = data => {
         case 40040: return '未知错误，请与我们联系'
         case 40410: return '您的用户名或密码错误，请检查后登录'
         case 40420: return '您的邀请码错误'
+        case 40430: return '您要操作的事务不存在'
         case 50000: return '数据库错误，请与我们联系'
         case 50010: return '未知错误，请与我们联系'
         case 50020: return '未知错误，请与我们联系'
