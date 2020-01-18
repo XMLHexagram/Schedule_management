@@ -70,15 +70,6 @@ export default {
         });
     },
     async deleteDailyAffair(id) {
-      // axios
-      //   .delete(baseURL + "/operaDaily?id=" + id)
-      //   .then(() => {
-      //     this.getDailyAffairs();
-      //   })
-      //   .catch(err => {
-      //     this.dailyAffairs = err;
-      //     alert("我们遇到了未知错误，这有可能导致程序无法正常运行");
-      //   });
       try {
         const token = localStorage.getItem("token")
         const { data: res } = await ApiInstance.delete(
