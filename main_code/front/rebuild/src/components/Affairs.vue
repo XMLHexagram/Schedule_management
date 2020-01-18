@@ -88,6 +88,7 @@
               disabled
               type="textarea"
               v-on:click="showTimePacker=true"
+              v-on:change="changeToDeadline"
             />
             <van-field
               :value="tempAffair.created_at"
@@ -218,6 +219,7 @@ export default {
             }
           }
         );
+        window.location.reload();
       } catch (e) {}
     }
   }
