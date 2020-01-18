@@ -16,7 +16,7 @@ const ApiErrorMsg = data => {
         case 50010: return '未知错误，请与我们联系'
         case 50020: return '未知错误，请与我们联系'
     }
-    return `未知错误（${err}）`
+    return `未知错误，请与我们联系（${err}）`
 }
 
 const ApiInstance = axios.create();
