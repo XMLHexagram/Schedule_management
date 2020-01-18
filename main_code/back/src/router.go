@@ -3,7 +3,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,8 +10,7 @@ type toReturn func(*gin.Context)
 
 func (s *Service) RouterInit() {
 	r := gin.Default()
-	r.Use(cors.Default())
-	r.Use(gin.Recovery())
+	r.Use(CorsMiddleware())
 
 	auth := r.Group("/auth")
 	{

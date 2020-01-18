@@ -6,7 +6,7 @@ import (
 )
 
 type Header struct {
-	Token string `header:"token"`
+	Token string `header:"Authorization"`
 }
 
 func JWT() gin.HandlerFunc {
