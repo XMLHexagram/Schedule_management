@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type toReturn func(*gin.Context)
+//type toReturn func(*gin.Context)
 
 func (s *Service) RouterInit() {
 	r := gin.Default()
@@ -41,6 +41,12 @@ func (s *Service) RouterInit() {
 		opera.DELETE("", requestEntryWithStatus(s.deleteAffair)) //删
 		opera.PUT("", requestEntryWithStatus(s.modifyAffair))    //改
 		//opera.GET("/find", s.findAffair) //查
+	}
+
+	image := r.Group("/backgroundImage")
+	//image.Use(JWT())
+	{
+		image.GET("",requestEntryDefault(s.getImage))
 	}
 
 	s.Router = r

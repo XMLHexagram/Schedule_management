@@ -29,6 +29,11 @@ type dailyEvent struct {
 	Owner string
 }
 
+type imageURL struct {
+	gorm.Model
+	URL string
+}
+
 type InvitationCode struct {
 	gorm.Model
 	Code string
@@ -48,6 +53,7 @@ func (s *Service) DBInit()  {
 	db.AutoMigrate(&dailyEvent{})
 	db.AutoMigrate(&User{})
 	db.AutoMigrate(&InvitationCode{})
+	db.AutoMigrate(&imageURL{})
 	s.DB = db
 	//fmt.Println(s.DB)
 }
