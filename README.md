@@ -11,11 +11,13 @@
 - [开发语言](#开发语言)
 - [版本更迭](#版本更迭)
 - Description:
+    - [后端开发配置说明](./main_code/back/descrip.md)
     - [API文档](./main_code/back/SMS_API.md)
     - [文件夹说明](fileDescription.md)
     - [后端使用说明](./main_code/back/Description.md)
     - [前端使用说明](./main_code/front/Description.md)
     - [Demo使用说明](./Demo/back/Description.md)
+
 
 
 
