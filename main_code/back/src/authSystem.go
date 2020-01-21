@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -42,10 +41,10 @@ func (s *Service) register(c *gin.Context) (int, interface{}) {
 
 	token, err := GenerateToken(tempUser.Username)
 	if err != nil {
-		fmt.Println(err)
+		//fmt.Println(err)
 		return makeErrorReturn(500, 50010, "Can't Generate Token")
 	}
-	return makeSuccessReturn(200, token)
+	return makeSuccessReturn(200, gin.H{"token":token})
 }
 
 func (s *Service) login(c *gin.Context) (int, interface{}) {
@@ -66,5 +65,5 @@ func (s *Service) login(c *gin.Context) (int, interface{}) {
 		return makeErrorReturn(500, 50010, "Can't Generate Token")
 	}
 
-	return makeSuccessReturn(200, token)
+	return makeSuccessReturn(200, gin.H{"token":token})
 }

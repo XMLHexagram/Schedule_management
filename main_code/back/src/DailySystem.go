@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 )
 
@@ -77,7 +76,7 @@ func (s *Service) modifyDailyEvents(c *gin.Context, owner string) (int, interfac
 	err := c.BindJSON(temp)
 	//fmt.Println(temp)
 	if err != nil {
-		fmt.Println(err)
+		//fmt.Println(err)
 		return makeErrorReturn(400, 40000, "Wrong Format Of JSON") //
 	}
 	tx := s.DB.Begin()

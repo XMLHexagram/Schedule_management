@@ -45,8 +45,10 @@ Payload:
 Success(200):
 ```json
 {
-    "data": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJleHAiOjE1Nzk3Njk5OTcsImlzcyI6IlNjaF9tYW4ifQ.XOaEfXMfBlqvygRscBHURg5lbdO-35ZuD6kBUnPxows", //token
-    "error":0,
+    "data": {
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RlciIsImV4cCI6MTU4MDIxMTc0NywiaXNzIjoiU2NoX21hbiJ9.nloucu6Cx4W0Xg5r54Uf-G0gixrrpaUoWZAAAAAAAA"
+    },
+    "error": 0,
     "msg": "success"
 }
 ```
@@ -63,7 +65,9 @@ Payload:
 success(200):
 ```json
 {
-    "data": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJleHAiOjE1Nzk3NzAzOTgsImlzcyI6IlNjaF9tYW4ifQ.4EyXUN1y93YNC_TKZR6uShmEyUmQUlTSM1fHTdY4C2o", //token
+    "data": {
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RlciIsImV4cCI6MTU4MDIxMTc0NywiaXNzIjoiU2NoX21hbiJ9.nloucu6Cx4W0Xg5r54Uf-G0gixrrpaUoWZGAAAAAAAA"
+    },
     "error": 0,
     "msg": "success"
 }
@@ -237,6 +241,22 @@ Success(200):
 ```json
 {
     "data": 20000,
+    "error": 0,
+    "msg": "success"
+}
+```
+
+
+## 获取随机背景图片
+
+#### GET `/backgroundImage` 
+
+```json
+{
+    "data": {
+        "URL": "http://schmanimage.sweetbeecr.com/test3",
+        "created_at": "2020-01-21T19:24:55+08:00"
+    },
     "error": 0,
     "msg": "success"
 }
